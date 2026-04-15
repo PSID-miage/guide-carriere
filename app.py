@@ -1,14 +1,17 @@
 import dash
-from dash import html, dcc
+from dash import html
 
-app = dash.Dash(__name__, use_pages=True)
-server = app.server
+app = dash.Dash(
+    __name__,
+    use_pages=True,
+    suppress_callback_exceptions=True
+)
 
 app.layout = html.Div([
-
-    dash.page_container 
-
+    dash.page_container
 ])
+
+server = app.server
 
 if __name__ == "__main__":
     app.run(debug=True)

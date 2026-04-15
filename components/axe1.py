@@ -7,12 +7,62 @@ def load_csv(file_path: str) -> pd.DataFrame:
     return df
 
 
+def is_active(series: pd.Series) -> pd.Series:
+    return series.notna() & (series.astype(str).str.strip() != "")
+
+
+def build_caracteristiques_metiers(
+    df_structure: pd.DataFrame,
+    df_rome: pd.DataFrame
+) -> pd.DataFrame:
+    df = df_structure.merge(
+        df_rome[
+            [
+                "code_rome",
+                "transition_num",
+                "transition_eco",
+                "transition_demo",
+                "emploi_cadre",
+                "emploi_reglemente",
+            ]
+        ],
+        on="code_rome",
+        how="left"
+    ).drop_duplicates(subset=["code_rome"])
+
+    blocs = []
+
+    mapping = {
+        "Transition numérique": "transition_num",
+        "Transition écologique": "transition_eco",
+        "Transition démographique": "transition_demo",
+        "Emploi cadre": "emploi_cadre",
+        "Emploi réglementé": "emploi_reglemente",
+    }
+
+    for label, col in mapping.items():
+        temp = df[is_active(df[col])].copy()
+        temp["caracteristique"] = label
+        blocs.append(
+            temp[
+                [
+                    "caracteristique",
+                    "code_rome",
+                    "libelle_rome",
+                    "libelle_domaine_professionel",
+                    "libelle_grand_domaine",
+                ]
+            ]
+        )
+
+    return pd.concat(blocs, ignore_index=True)
+
+
 def prepare_axe1_data(data_path: str = "data/") -> dict:
     df_structure = load_csv(data_path + "unix_cr_gd_dp_v460_utf8.csv")
     df_appellations = load_csv(data_path + "unix_referentiel_appellation_v460_utf8.csv")
     df_rome = load_csv(data_path + "unix_referentiel_code_rome_v460_utf8.csv")
 
-    # Nettoyage minimal
     df_structure = df_structure.drop_duplicates()
     df_appellations = df_appellations.drop_duplicates()
     df_rome = df_rome.drop_duplicates()
@@ -25,7 +75,7 @@ def prepare_axe1_data(data_path: str = "data/") -> dict:
         "nb_domaines_professionnels": df_structure["code_domaine_professionel"].nunique()
     }
 
-    # Métiers par grand domaine
+    # Graphique 1
     metiers_par_grand_domaine = (
         df_structure.groupby("libelle_grand_domaine")["code_rome"]
         .nunique()
@@ -33,7 +83,7 @@ def prepare_axe1_data(data_path: str = "data/") -> dict:
         .sort_values("nb_metiers", ascending=True)
     )
 
-    # Appellations par métier puis rattachement aux domaines
+    # Graphique 2
     appellations_par_metier = (
         df_appellations.groupby("code_rome")["code_ogr"]
         .nunique()
@@ -46,9 +96,7 @@ def prepare_axe1_data(data_path: str = "data/") -> dict:
         how="left"
     )
 
-    df_metiers_appellations["nb_appellations"] = (
-        df_metiers_appellations["nb_appellations"].fillna(0)
-    )
+    df_metiers_appellations["nb_appellations"] = df_metiers_appellations["nb_appellations"].fillna(0)
 
     comparaison_grands_domaines = (
         df_metiers_appellations
@@ -60,11 +108,8 @@ def prepare_axe1_data(data_path: str = "data/") -> dict:
         .reset_index()
         .sort_values("nb_appellations", ascending=True)
     )
-    comparaison_grands_domaines["appellations_par_metier"] = (
-        comparaison_grands_domaines["nb_appellations"] / comparaison_grands_domaines["nb_metiers"]
-    ).round(1)
 
-    # Top 10 domaines professionnels par appellations
+    # Graphique 3
     top10_domaines_appellations = (
         df_metiers_appellations
         .groupby(["libelle_grand_domaine", "libelle_domaine_professionel"])
@@ -77,24 +122,28 @@ def prepare_axe1_data(data_path: str = "data/") -> dict:
         .head(10)
     )
 
-    # Tags métier
+    # Tags / donuts
     tags = {
-        "Transition numérique": df_rome["transition_num"].notna().sum(),
-        "Transition écologique": df_rome["transition_eco"].notna().sum(),
-        "Transition démographique": df_rome["transition_demo"].notna().sum(),
-        "Emploi cadre": df_rome["emploi_cadre"].notna().sum(),
-        "Emploi réglementé": df_rome["emploi_reglemente"].notna().sum(),
+        "Transition numérique": df_rome[is_active(df_rome["transition_num"])]["code_rome"].nunique(),
+        "Transition écologique": df_rome[is_active(df_rome["transition_eco"])]["code_rome"].nunique(),
+        "Transition démographique": df_rome[is_active(df_rome["transition_demo"])]["code_rome"].nunique(),
+        "Emploi cadre": df_rome[is_active(df_rome["emploi_cadre"])]["code_rome"].nunique(),
+        "Emploi réglementé": df_rome[is_active(df_rome["emploi_reglemente"])]["code_rome"].nunique(),
     }
 
     tags_metiers = pd.DataFrame({
         "caracteristique": list(tags.keys()),
         "nb_metiers": list(tags.values())
-    }).sort_values("nb_metiers", ascending=True)
+    })
+
+    # Table interactive
+    caracteristiques_metiers = build_caracteristiques_metiers(df_structure, df_rome)
 
     return {
         "kpis": kpis,
         "metiers_par_grand_domaine": metiers_par_grand_domaine,
         "comparaison_grands_domaines": comparaison_grands_domaines,
         "top10_domaines_appellations": top10_domaines_appellations,
-        "tags_metiers": tags_metiers
+        "tags_metiers": tags_metiers,
+        "caracteristiques_metiers": caracteristiques_metiers
     }

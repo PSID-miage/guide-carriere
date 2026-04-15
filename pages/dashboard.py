@@ -368,6 +368,21 @@ layout = html.Div([
             }
         ),
         dcc.Graph(figure=fig_metiers_grands_domaines),
+        html.Div([
+            html.H4("À retenir", style={"marginTop": "0", "color": "#2E86AB"}),
+            html.P(
+                "Ce graphique met en évidence la répartition des métiers entre les 14 grands domaines du référentiel. "
+                "Il permet de repérer les grands pôles d’activité, mais aussi les domaines plus spécialisés. "
+                "Une forte concentration de métiers dans certains domaines peut traduire une plus grande diversité de fonctions "
+                "professionnelles, tandis que les domaines moins représentés renvoient à des secteurs plus ciblés.",
+                style={"marginBottom": "0", "lineHeight": "1.6", "color": "#444"}
+            )
+        ], style={
+            "backgroundColor": "#f8f9fb",
+            "padding": "15px",
+            "borderRadius": "10px",
+            "marginTop": "10px"
+        })
     ], style={
         "backgroundColor": "white",
         "padding": "25px",
@@ -391,6 +406,20 @@ layout = html.Div([
             }
         ),
         dcc.Graph(figure=fig_comparaison),
+        html.Div([
+            html.H4("À retenir", style={"marginTop": "0", "color": "#2E86AB"}),
+            html.P(
+                "Contrairement au graphique précédent, qui s’intéresse aux métiers ROME, celui-ci se concentre sur les appellations, "
+                "c’est-à-dire les intitulés d’emploi concrets associés aux métiers. "
+                "Il permet donc d’évaluer la richesse terminologique et la diversité des dénominations présentes dans chaque grand domaine.",
+                style={"marginBottom": "0", "lineHeight": "1.6", "color": "#444"}
+            )
+        ], style={
+            "backgroundColor": "#f8f9fb",
+            "padding": "15px",
+            "borderRadius": "10px",
+            "marginTop": "10px"
+        })
     ], style={
         "backgroundColor": "white",
         "padding": "25px",
@@ -414,6 +443,20 @@ layout = html.Div([
             }
         ),
         dcc.Graph(figure=fig_top10_appellations),
+        html.Div([
+            html.H4("À retenir", style={"marginTop": "0", "color": "#2E86AB"}),
+            html.P(
+                "Ce graphique propose un zoom sur les domaines professionnels les plus riches en appellations. "
+                "Il permet d’identifier les domaines où la granularité est la plus forte, c’est-à-dire ceux où un même domaine "
+                "regroupe de nombreux intitulés d’emploi proches, spécialisés ou contextualisés.",
+                style={"marginBottom": "0", "lineHeight": "1.6", "color": "#444"}
+            )
+        ], style={
+            "backgroundColor": "#f8f9fb",
+            "padding": "15px",
+            "borderRadius": "10px",
+            "marginTop": "10px"
+        })
     ], style={
         "backgroundColor": "white",
         "padding": "25px",
@@ -441,10 +484,38 @@ layout = html.Div([
         html.Div([
             html.Div([
                 dcc.Graph(id="fig-transitions", figure=fig_transitions),
+                html.Div([
+                    html.H4("À retenir", style={"marginTop": "0", "color": "#2E86AB"}),
+                    html.P(
+                        "Ce graphique met en évidence la part des métiers associés aux transitions écologique, "
+                        "numérique et démographique. Il apporte une lecture complémentaire du référentiel en montrant "
+                        "que certains métiers sont directement liés aux grandes transformations actuelles du marché du travail.",
+                        style={"marginBottom": "0", "lineHeight": "1.6", "color": "#444"}
+                    )
+                ], style={
+                    "backgroundColor": "#f8f9fb",
+                    "padding": "12px",
+                    "borderRadius": "10px",
+                    "marginTop": "10px"
+                })
             ], style={"width": "48%"}),
 
             html.Div([
                 dcc.Graph(id="fig-autres", figure=fig_autres),
+                html.Div([
+                    html.H4("À retenir", style={"marginTop": "0", "color": "#2E86AB"}),
+                    html.P(
+                        "Ce graphique distingue les métiers cadres des métiers réglementés. "
+                        "Il permet d’ajouter une lecture plus statutaire du référentiel, en complément "
+                        "de la lecture sectorielle et des grandes transitions.",
+                        style={"marginBottom": "0", "lineHeight": "1.6", "color": "#444"}
+                    )
+                ], style={
+                    "backgroundColor": "#f8f9fb",
+                    "padding": "12px",
+                    "borderRadius": "10px",
+                    "marginTop": "10px"
+                })
             ], style={"width": "48%"})
         ], style={
             "display": "flex",
@@ -486,8 +557,8 @@ layout = html.Div([
             columns=[
                 {"name": "Code ROME", "id": "code_rome"},
                 {"name": "Métier", "id": "libelle_rome"},
-                {"name": "Domaine professionnel", "id": "libelle_domaine_professionel"},
                 {"name": "Grand domaine", "id": "libelle_grand_domaine"},
+                {"name": "Domaine professionnel", "id": "libelle_domaine_professionel"},
             ],
             data=[],
             page_size=10,
@@ -522,7 +593,6 @@ layout = html.Div([
     "width": "100%",
     "boxSizing": "border-box"
 })
-
 
 # =========================
 # Callbacks

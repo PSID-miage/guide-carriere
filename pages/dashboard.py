@@ -1,5 +1,5 @@
 import dash
-from dash import html, dcc
+from dash import html, dcc, dash_table, Input, Output, callback, ctx
 import plotly.express as px
 
 from components.axe1 import prepare_axe1_data
@@ -7,8 +7,125 @@ from components.axe1 import prepare_axe1_data
 dash.register_page(__name__, path="/dashboard")
 
 axe1 = prepare_axe1_data("data/")
-
 kpis = axe1["kpis"]
+
+
+# =========================
+# Fonctions graphiques
+# =========================
+
+def make_transitions_figure(selected=None):
+    df = axe1["tags_metiers"][
+        axe1["tags_metiers"]["caracteristique"].isin([
+            "Transition numérique",
+            "Transition écologique",
+            "Transition démographique"
+        ])
+    ].copy()
+
+    base_colors = {
+        "Transition numérique": "#A8DADC",
+        "Transition écologique": "#CDEAC0",
+        "Transition démographique": "#F4C2C2"
+    }
+
+    dark_colors = {
+        "Transition numérique": "#6FAFC1",
+        "Transition écologique": "#8FBC8F",
+        "Transition démographique": "#D98C8C"
+    }
+
+    colors = []
+    pulled = []
+
+    for c in df["caracteristique"]:
+        if c == selected:
+            colors.append(dark_colors[c])
+            pulled.append(0.08)
+        else:
+            colors.append(base_colors[c])
+            pulled.append(0)
+
+    fig = px.pie(
+        df,
+        names="caracteristique",
+        values="nb_metiers",
+        hole=0.45,
+        title="Métiers liés aux transitions"
+    )
+
+    fig.update_traces(
+        marker=dict(colors=colors),
+        pull=pulled,
+        textinfo="percent"
+    )
+
+    fig.update_layout(
+        template="plotly_white",
+        height=420,
+        title_x=0.02,
+        margin=dict(l=30, r=30, t=70, b=30),
+        legend_title_text=""
+    )
+    return fig
+
+
+def make_autres_figure(selected=None):
+    df = axe1["tags_metiers"][
+        axe1["tags_metiers"]["caracteristique"].isin([
+            "Emploi cadre",
+            "Emploi réglementé"
+        ])
+    ].copy()
+
+    base_colors = {
+        "Emploi cadre": "#CDB4DB",
+        "Emploi réglementé": "#FFD6A5"
+    }
+
+    dark_colors = {
+        "Emploi cadre": "#9F86C0",
+        "Emploi réglementé": "#E9A96B"
+    }
+
+    colors = []
+    pulled = []
+
+    for c in df["caracteristique"]:
+        if c == selected:
+            colors.append(dark_colors[c])
+            pulled.append(0.08)
+        else:
+            colors.append(base_colors[c])
+            pulled.append(0)
+
+    fig = px.pie(
+        df,
+        names="caracteristique",
+        values="nb_metiers",
+        hole=0.45,
+        title="Autres caractéristiques métiers"
+    )
+
+    fig.update_traces(
+        marker=dict(colors=colors),
+        pull=pulled,
+        textinfo="percent"
+    )
+
+    fig.update_layout(
+        template="plotly_white",
+        height=420,
+        title_x=0.02,
+        margin=dict(l=30, r=30, t=70, b=30),
+        legend_title_text=""
+    )
+    return fig
+
+
+# =========================
+# Figures statiques
+# =========================
 
 fig_metiers_grands_domaines = px.bar(
     axe1["metiers_par_grand_domaine"],
@@ -18,7 +135,7 @@ fig_metiers_grands_domaines = px.bar(
     text="nb_metiers",
     title="Répartition des métiers ROME par grand domaine",
     color="nb_metiers",
-    color_continuous_scale="Teal",
+    color_continuous_scale="Blues",
     labels={
         "nb_metiers": "Nombre de métiers",
         "libelle_grand_domaine": "Grand domaine"
@@ -51,7 +168,13 @@ fig_comparaison = px.bar_polar(
         "nb_appellations": "Nombre d’appellations",
         "libelle_grand_domaine": "Grand domaine"
     },
-    color_continuous_scale="Teal",
+    color_continuous_scale=[
+        [0.0, "#dbe9f6"],
+        [0.25, "#b8d4ea"],
+        [0.5, "#8bbbd9"],
+        [0.75, "#5b9ec9"],
+        [1.0, "#2f6fa3"]
+    ],
     custom_data=["libelle_grand_domaine", "nb_appellations", "nb_metiers"]
 )
 
@@ -101,72 +224,17 @@ fig_top10_appellations.update_layout(
     bargap=0.25
 )
 
-fig_transitions = px.pie(
-    axe1["tags_metiers"][
-        axe1["tags_metiers"]["caracteristique"].isin([
-            "Transition numérique",
-            "Transition écologique",
-            "Transition démographique"
-        ])
-    ],
-    names="caracteristique",
-    values="nb_metiers",
-    hole=0.45,
-    title="Métiers liés aux transitions",
-    color="caracteristique",
-    color_discrete_map={
-        "Transition numérique": "#A8DADC",
-        "Transition écologique": "#CDEAC0",
-        "Transition démographique": "#F4C2C2"
-    }
-)
+fig_transitions = make_transitions_figure("Transition écologique")
+fig_autres = make_autres_figure(None)
 
-fig_transitions.update_traces(
-    textinfo="percent+label"
-)
 
-fig_transitions.update_layout(
-    template="plotly_white",
-    height=420,
-    title_x=0.02,
-    margin=dict(l=30, r=30, t=70, b=30),
-    legend_title_text=""
-)
-
-fig_autres = px.pie(
-    axe1["tags_metiers"][
-        axe1["tags_metiers"]["caracteristique"].isin([
-            "Emploi cadre",
-            "Emploi réglementé"
-        ])
-    ],
-    names="caracteristique",
-    values="nb_metiers",
-    hole=0.45,
-    title="Autres caractéristiques métiers",
-    color="caracteristique",
-    color_discrete_map={
-        "Emploi cadre": "#CDB4DB",
-        "Emploi réglementé": "#FFD6A5"
-    }
-)
-
-fig_autres.update_traces(
-    textinfo="percent+label"
-)
-
-fig_autres.update_layout(
-    template="plotly_white",
-    height=420,
-    title_x=0.02,
-    margin=dict(l=30, r=30, t=70, b=30),
-    legend_title_text=""
-)
-
-fig_transitions.update_traces(textinfo="percent")
-fig_autres.update_traces(textinfo="percent")
+# =========================
+# Layout
+# =========================
 
 layout = html.Div([
+
+    dcc.Store(id="selected-caracteristique", data="Transition écologique"),
 
     html.Div([
         html.H1(
@@ -300,21 +368,6 @@ layout = html.Div([
             }
         ),
         dcc.Graph(figure=fig_metiers_grands_domaines),
-        html.Div([
-            html.H4("À retenir", style={"marginTop": "0", "color": "#2E86AB"}),
-            html.P(
-                "Ce graphique met en évidence la répartition des métiers entre les 14 grands domaines du référentiel. "
-                "Il permet de repérer les grands pôles d’activité, mais aussi les domaines plus spécialisés. "
-                "Une forte concentration de métiers dans certains domaines peut traduire une plus grande diversité de fonctions "
-                "professionnelles, tandis que les domaines moins représentés renvoient à des secteurs plus ciblés.",
-                style={"marginBottom": "0", "lineHeight": "1.6", "color": "#444"}
-            )
-        ], style={
-            "backgroundColor": "#f8f9fb",
-            "padding": "15px",
-            "borderRadius": "10px",
-            "marginTop": "10px"
-        })
     ], style={
         "backgroundColor": "white",
         "padding": "25px",
@@ -338,20 +391,6 @@ layout = html.Div([
             }
         ),
         dcc.Graph(figure=fig_comparaison),
-        html.Div([
-            html.H4("À retenir", style={"marginTop": "0", "color": "#2E86AB"}),
-            html.P(
-                "Contrairement au graphique précédent, qui s’intéresse aux métiers ROME, celui-ci se concentre sur les appellations, "
-                "c’est-à-dire les intitulés d’emploi concrets associés aux métiers. "
-                "Il permet donc d’évaluer la richesse terminologique et la diversité des dénominations présentes dans chaque grand domaine.",
-                style={"marginBottom": "0", "lineHeight": "1.6", "color": "#444"}
-            )
-        ], style={
-            "backgroundColor": "#f8f9fb",
-            "padding": "15px",
-            "borderRadius": "10px",
-            "marginTop": "10px"
-        })
     ], style={
         "backgroundColor": "white",
         "padding": "25px",
@@ -375,20 +414,6 @@ layout = html.Div([
             }
         ),
         dcc.Graph(figure=fig_top10_appellations),
-        html.Div([
-            html.H4("À retenir", style={"marginTop": "0", "color": "#2E86AB"}),
-            html.P(
-                "Ce graphique propose un zoom sur les domaines professionnels les plus riches en appellations. "
-                "Il permet d’identifier les domaines où la granularité est la plus forte, c’est-à-dire ceux où un même domaine "
-                "regroupe de nombreux intitulés d’emploi proches, spécialisés ou contextualisés.",
-                style={"marginBottom": "0", "lineHeight": "1.6", "color": "#444"}
-            )
-        ], style={
-            "backgroundColor": "#f8f9fb",
-            "padding": "15px",
-            "borderRadius": "10px",
-            "marginTop": "10px"
-        })
     ], style={
         "backgroundColor": "white",
         "padding": "25px",
@@ -403,8 +428,8 @@ layout = html.Div([
             style={"color": "#1f2d3d", "marginBottom": "10px"}
         ),
         html.P(
-            "Cette partie distingue les métiers liés aux grandes transitions actuelles "
-            "des métiers marqués par des caractéristiques statutaires ou réglementaires.",
+            "Cliquez sur une caractéristique dans un donut pour afficher les métiers correspondants en bas. "
+            "Vous pouvez aussi utiliser le filtre sous les graphiques.",
             style={
                 "color": "#555",
                 "fontSize": "15px",
@@ -415,39 +440,11 @@ layout = html.Div([
 
         html.Div([
             html.Div([
-                dcc.Graph(figure=fig_transitions),
-                html.Div([
-                    html.H4("À retenir", style={"marginTop": "0", "color": "#2E86AB"}),
-                    html.P(
-                        "Ce graphique met en évidence la part des métiers associés aux transitions écologique, "
-                        "numérique et démographique. Il apporte une lecture complémentaire du référentiel en montrant "
-                        "que certains métiers sont directement liés aux grandes transformations actuelles du marché du travail.",
-                        style={"marginBottom": "0", "lineHeight": "1.6", "color": "#444"}
-                    )
-                ], style={
-                    "backgroundColor": "#f8f9fb",
-                    "padding": "12px",
-                    "borderRadius": "10px",
-                    "marginTop": "10px"
-                })
+                dcc.Graph(id="fig-transitions", figure=fig_transitions),
             ], style={"width": "48%"}),
 
             html.Div([
-                dcc.Graph(figure=fig_autres),
-                html.Div([
-                    html.H4("À retenir", style={"marginTop": "0", "color": "#2E86AB"}),
-                    html.P(
-                        "Ce graphique distingue les métiers cadres des métiers réglementés. "
-                        "Il permet d’ajouter une lecture plus statutaire du référentiel, en complément "
-                        "de la lecture sectorielle et des grandes transitions.",
-                        style={"marginBottom": "0", "lineHeight": "1.6", "color": "#444"}
-                    )
-                ], style={
-                    "backgroundColor": "#f8f9fb",
-                    "padding": "12px",
-                    "borderRadius": "10px",
-                    "marginTop": "10px"
-                })
+                dcc.Graph(id="fig-autres", figure=fig_autres),
             ], style={"width": "48%"})
         ], style={
             "display": "flex",
@@ -455,6 +452,61 @@ layout = html.Div([
             "alignItems": "flex-start",
             "gap": "20px"
         })
+    ], style={
+        "backgroundColor": "white",
+        "padding": "25px",
+        "borderRadius": "12px",
+        "boxShadow": "0 2px 8px rgba(0,0,0,0.05)",
+        "marginBottom": "30px"
+    }),
+
+    html.Div([
+        html.H3(
+            "Liste des métiers par caractéristique",
+            style={"color": "#1f2d3d", "marginBottom": "10px"}
+        ),
+
+        dcc.RadioItems(
+            id="filter-caracteristique",
+            options=[
+                {"label": "Transition numérique", "value": "Transition numérique"},
+                {"label": "Transition écologique", "value": "Transition écologique"},
+                {"label": "Transition démographique", "value": "Transition démographique"},
+                {"label": "Emploi cadre", "value": "Emploi cadre"},
+                {"label": "Emploi réglementé", "value": "Emploi réglementé"},
+            ],
+            value="Transition écologique",
+            inline=True,
+            style={"marginBottom": "20px"},
+            inputStyle={"marginRight": "6px", "marginLeft": "12px"}
+        ),
+
+        dash_table.DataTable(
+            id="table-metiers-caracteristique",
+            columns=[
+                {"name": "Code ROME", "id": "code_rome"},
+                {"name": "Métier", "id": "libelle_rome"},
+                {"name": "Domaine professionnel", "id": "libelle_domaine_professionel"},
+                {"name": "Grand domaine", "id": "libelle_grand_domaine"},
+            ],
+            data=[],
+            page_size=10,
+            sort_action="native",
+            filter_action="native",
+            style_table={"overflowX": "auto"},
+            style_cell={
+                "textAlign": "left",
+                "padding": "10px",
+                "fontFamily": "Arial",
+                "fontSize": "14px",
+                "whiteSpace": "normal",
+                "height": "auto",
+            },
+            style_header={
+                "backgroundColor": "#eaf2f8",
+                "fontWeight": "bold"
+            }
+        )
     ], style={
         "backgroundColor": "white",
         "padding": "25px",
@@ -470,3 +522,49 @@ layout = html.Div([
     "width": "100%",
     "boxSizing": "border-box"
 })
+
+
+# =========================
+# Callbacks
+# =========================
+
+@callback(
+    Output("selected-caracteristique", "data"),
+    Output("filter-caracteristique", "value"),
+    Input("fig-transitions", "clickData"),
+    Input("fig-autres", "clickData"),
+    Input("filter-caracteristique", "value"),
+)
+def update_selected_caracteristique(click_transitions, click_autres, filter_value):
+    triggered = ctx.triggered_id
+
+    if triggered == "fig-transitions" and click_transitions:
+        value = click_transitions["points"][0]["label"]
+        return value, value
+
+    if triggered == "fig-autres" and click_autres:
+        value = click_autres["points"][0]["label"]
+        return value, value
+
+    return filter_value, filter_value
+
+
+@callback(
+    Output("fig-transitions", "figure"),
+    Output("fig-autres", "figure"),
+    Output("table-metiers-caracteristique", "data"),
+    Input("selected-caracteristique", "data"),
+)
+def update_figures_and_table(selected):
+    df = axe1["caracteristiques_metiers"].copy()
+    df_filtered = df[df["caracteristique"] == selected].copy()
+
+    df_filtered = df_filtered.drop_duplicates(subset=["code_rome"])
+    df_filtered = df_filtered.sort_values(
+        ["libelle_grand_domaine", "libelle_domaine_professionel", "libelle_rome"]
+    )
+
+    fig1 = make_transitions_figure(selected)
+    fig2 = make_autres_figure(selected)
+
+    return fig1, fig2, df_filtered.to_dict("records")

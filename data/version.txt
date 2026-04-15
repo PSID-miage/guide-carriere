@@ -1,0 +1,26 @@
+Numero de version : 60
+
+Date de publication : 18/09/2025
+
+Date de validation : 27/08/2025
+
+Titre/commentaire :  ROME 4.0 version 60 - 25M09
+
+Description : Cette version de septembre 2025 apporte uniquement des évolutions et modifications de contenu des fiches métiers et des évolutions du référentiel de compétences.
+Le ROME compte toujours 1584 fiches métier depuis juin 2025.
+
+Présentation des évolutions sur cette version :
+
+Modification de référentiel :
+Renommage, changement d’indexation, changement d’attribut, création d’items sur les référentiels de Compétence et Savoir.
+1 modification mineure de libellé de macro-compétence.
+4 modifications mineures de libellé d’appellations.
+Pas de modification du référentiel de Contextes de travail.
+
+Modification de fiche :
+Modifications de contenu des textes libres : définition et accès à l’emploi
+Ajout ou suppression de compétences et savoirs, de contextes de travail, de mobilités
+Modification de Tags (Métier réglementé, Cadre, Transition numérique, Transition démographique et Transition écologique)
+Aucune nouvelle fiche ajoutée.
+
+

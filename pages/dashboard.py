@@ -147,9 +147,9 @@ layout = html.Div([
 
     # ── Onglets ──────────────────────────────────────────────────────
     dcc.Tabs(id="tabs-axes", value="axe1", style={"marginBottom": "30px"}, children=[
-        dcc.Tab(label="Axe 1 — Cartographie", value="axe1"),
-        dcc.Tab(label="Axe 2 — Compétences",  value="axe2"),
-        dcc.Tab(label="Axe 3/4 — Mobilités",  value="axe3"),
+        dcc.Tab(label="Axe 1 - Cartographie", value="axe1"),
+        dcc.Tab(label="Axe 2 - Compétences",  value="axe2"),
+        dcc.Tab(label="Axes 3/4 - Mobilités",  value="axe3"),
     ]),
 
     # ── Axe 1 ────────────────────────────────────────────────────────
@@ -163,7 +163,7 @@ layout = html.Div([
             html.P("Problématique générale : Comment le marché des métiers est-il structuré en France, "
                    "et comment les compétences permettent-elles d'expliquer les proximités et les évolutions possibles entre métiers ?",
                    style={"fontSize": "18px", "color": "#444", "marginBottom": "25px", "lineHeight": "1.6"}),
-            html.H2("Axe 1 — Cartographie du référentiel ROME", style={"color": "#2E86AB", "marginBottom": "10px"}),
+            html.H2("AXE 1 : CARTOGRAPHIE DU RÉFÉRENTIEL ROME", style={'fontWeight': '800', 'color': "#0A0A0A", 'letterSpacing': '0.5px'}),
             html.P("Question de l'axe : Comment le référentiel ROME est-il structuré ? "
                    "Existe-t-il une concentration des métiers et des appellations dans certains domaines ?",
                    style={"fontSize": "17px", "color": "#555", "lineHeight": "1.6"}),
@@ -273,7 +273,7 @@ layout = html.Div([
 
     # ── Axe 2 ────────────────────────────────────────────────────────
     html.Div(id="content-axe2", style={"display": "none"}, children=[
-        html.H2("Axe 2 — Analyse des compétences", style={"color":"#2E86AB","marginBottom":"20px"}),
+        html.H2("AXE 2 : ANALYSE DES COMPÉTENCES", style={'fontWeight': '800', 'color': "#0A0A0A", 'letterSpacing': '0.5px'}),
         html.Div([
             html.H3("Compétences les plus transversales"), html.P("Compétences apparaissant dans le plus de métiers."),
             dcc.Graph(figure=fig_top_comp)

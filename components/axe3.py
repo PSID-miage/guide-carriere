@@ -15,7 +15,7 @@ def render_axe3(df_gd):
             html.H2("AXE 3 : RELATIONS ET MOBILITÉ ENTRE MÉTIERS", 
                     style={'fontWeight': '800', 'color': "#0A0A0A", 'letterSpacing': '0.5px'}),
             html.P("Exploration visuelle des mobilités inter-métiers et analyse : Les métiers sont-ils isolés ou interconnectés ? Existe-t-il des passerelles ?",
-                   style={'fontSize': '1.1rem', 'color': "#2F79B6", 'maxWidth': '800px'})
+                   style={"fontSize": "17px", "color": "#555", "lineHeight": "1.6"})
         ], className="mb-5 mt-4"),
 
         # --- PANNEAU DE SÉLECTION ---
@@ -23,7 +23,7 @@ def render_axe3(df_gd):
             dbc.CardBody([
                 dbc.Row([
                     dbc.Col([
-                        html.Label("1. Choisir un Grand Domaine", style={'fontWeight': '600', 'color': '#2c3e50', 'marginBottom': '10px'}),
+                        html.Label("1. Choisir un grand domaine", style={'fontWeight': '600', 'color': '#2c3e50', 'marginBottom': '10px'}),
                         dcc.Dropdown(id='domaine-filter', options=options_domaines, value=options_domaines[0]['value'], clearable=False, style={'borderRadius': '10px'}),
                     ], md=6),
                     dbc.Col([
@@ -47,7 +47,7 @@ def render_axe3(df_gd):
             
             dbc.Col([
                 dbc.Card([
-                    dbc.CardHeader("Index des Métiers", style={'backgroundColor': 'transparent', 'fontWeight': '700', 'borderBottom': 'none', 'paddingTop': '20px'}),
+                    dbc.CardHeader("Index des métiers", style={'backgroundColor': 'transparent', 'fontWeight': '700', 'borderBottom': 'none', 'paddingTop': '20px'}),
                     dbc.CardBody([
                         dash_table.DataTable(
                             id='table-legende',
@@ -65,7 +65,7 @@ def render_axe3(df_gd):
         # --- SECTION G8 : PIVOTS ---
         html.Div([
             html.Div(style={'width': '60px', 'height': '4px', 'backgroundColor': "#71a9e1", 'marginBottom': '20px', 'borderRadius': '2px'}),
-            html.H4("Top 10 : Les Métiers Pivots", style={'fontWeight': '700', 'color': '#2c3e50'}),
+            html.H4("Top 10 : Les métiers pivots", style={'fontWeight': '700', 'color': '#2c3e50'}),
             html.P("Métiers possédant le plus haut taux d'interconnectivité (entrante et sortante).",
                    style={'color': '#718093', 'marginBottom': '30px'})
         ], className="mt-5"),
@@ -79,7 +79,7 @@ def render_axe3(df_gd):
         # --- SECTION G10 : GLOBAL ---
         html.Div([
             html.Div(style={'width': '60px', 'height': '4px', 'backgroundColor': '#6f42c1', 'marginBottom': '20px', 'borderRadius': '2px'}),
-            html.H4("Bar Chart de Potentiel de Mobilité : ouverture à la Mobilité par Secteur", style={'fontWeight': '700', 'color': '#2c3e50'}),
+            html.H4("Bar Chart de potentiel de mobilité : ouverture à la mobilité par secteur", style={'fontWeight': '700', 'color': '#2c3e50'}),
             html.P("Analyse du nombre moyen de passerelles sortantes par métier pour chaque grand domaine.",
                    style={'color': '#718093', 'marginBottom': '30px'})
         ], className="mt-5"),

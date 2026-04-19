@@ -43,6 +43,18 @@ _NOTE = {
 }
 
 # ════════════════════════════════════════════════════════════════════
+# PALETTE COULEURS — ALIGNÉE AVEC LA HOME
+# ════════════════════════════════════════════════════════════════════
+
+HOME_CYAN = "#22D3EE"
+HOME_BLUE = "#38BDF8"
+HOME_BLUE_SOFT = "#60A5FA"
+HOME_PURPLE = "#8B5CF6"
+HOME_PURPLE_DARK = "#7C3AED"
+HOME_MINT = "#99F6E4"
+HOME_NAVY = "#0F172A"
+
+# ════════════════════════════════════════════════════════════════════
 # AXE 1 — DONNÉES & FIGURES
 # ════════════════════════════════════════════════════════════════════
 
@@ -58,14 +70,14 @@ def make_transitions_figure(selected=None):
     ].copy()
 
     base_colors = {
-        "Transition numérique": "#A8DADC",
-        "Transition écologique": "#CDEAC0",
-        "Transition démographique": "#F4C2C2"
+        "Transition numérique": HOME_BLUE_SOFT,
+        "Transition écologique": HOME_MINT,
+        "Transition démographique": "#C4B5FD",
     }
     dark_colors = {
-        "Transition numérique": "#6FAFC1",
-        "Transition écologique": "#8FBC8F",
-        "Transition démographique": "#D98C8C"
+        "Transition numérique": HOME_BLUE,
+        "Transition écologique": HOME_CYAN,
+        "Transition démographique": HOME_PURPLE,
     }
 
     colors = [dark_colors[c] if c == selected else base_colors[c] for c in df["caracteristique"]]
@@ -78,13 +90,21 @@ def make_transitions_figure(selected=None):
         hole=0.45,
         title="Métiers liés aux transitions"
     )
-    fig.update_traces(marker=dict(colors=colors), pull=pulled, textinfo="percent")
+    fig.update_traces(
+        marker=dict(colors=colors),
+        pull=pulled,
+        textinfo="percent",
+        textfont=dict(color=HOME_NAVY)
+    )
     fig.update_layout(
         template="plotly_white",
         height=420,
         title_x=0.02,
         margin=dict(l=30, r=30, t=70, b=30),
-        legend_title_text=""
+        legend_title_text="",
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        font=dict(color=HOME_NAVY)
     )
     return fig
 
@@ -95,12 +115,12 @@ def make_autres_figure(selected=None):
     ].copy()
 
     base_colors = {
-        "Emploi cadre": "#CDB4DB",
-        "Emploi réglementé": "#FFD6A5"
+        "Emploi cadre": "#C4B5FD",
+        "Emploi réglementé": HOME_MINT,
     }
     dark_colors = {
-        "Emploi cadre": "#9F86C0",
-        "Emploi réglementé": "#E9A96B"
+        "Emploi cadre": HOME_PURPLE,
+        "Emploi réglementé": HOME_CYAN,
     }
 
     colors = [dark_colors[c] if c == selected else base_colors[c] for c in df["caracteristique"]]
@@ -113,13 +133,21 @@ def make_autres_figure(selected=None):
         hole=0.45,
         title="Autres caractéristiques métiers"
     )
-    fig.update_traces(marker=dict(colors=colors), pull=pulled, textinfo="percent")
+    fig.update_traces(
+        marker=dict(colors=colors),
+        pull=pulled,
+        textinfo="percent",
+        textfont=dict(color=HOME_NAVY)
+    )
     fig.update_layout(
         template="plotly_white",
         height=420,
         title_x=0.02,
         margin=dict(l=30, r=30, t=70, b=30),
-        legend_title_text=""
+        legend_title_text="",
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        font=dict(color=HOME_NAVY)
     )
     return fig
 
@@ -132,7 +160,12 @@ fig_metiers_grands_domaines = px.bar(
     text="nb_metiers",
     title="Répartition des métiers ROME par grand domaine",
     color="nb_metiers",
-    color_continuous_scale="Blues",
+    color_continuous_scale=[
+        [0.0, HOME_MINT],
+        [0.35, HOME_CYAN],
+        [0.7, HOME_BLUE],
+        [1.0, HOME_PURPLE],
+    ],
     labels={"nb_metiers": "Nombre de métiers", "libelle_grand_domaine": "Grand domaine"}
 )
 fig_metiers_grands_domaines.update_traces(textposition="outside", marker_line_width=0)
@@ -144,7 +177,10 @@ fig_metiers_grands_domaines.update_layout(
     yaxis_title="",
     margin=dict(l=220, r=60, t=70, b=50),
     coloraxis_showscale=False,
-    bargap=0.25
+    bargap=0.25,
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    font=dict(color=HOME_NAVY)
 )
 
 fig_comparaison = px.bar_polar(
@@ -155,11 +191,11 @@ fig_comparaison = px.bar_polar(
     title="Volume d'appellations par grand domaine",
     labels={"nb_appellations": "Nombre d'appellations", "libelle_grand_domaine": "Grand domaine"},
     color_continuous_scale=[
-        [0.0, "#dbe9f6"],
-        [0.25, "#b8d4ea"],
-        [0.5, "#8bbbd9"],
-        [0.75, "#5b9ec9"],
-        [1.0, "#2f6fa3"]
+        [0.0, HOME_MINT],
+        [0.25, HOME_CYAN],
+        [0.5, HOME_BLUE_SOFT],
+        [0.75, HOME_BLUE],
+        [1.0, HOME_PURPLE],
     ],
     custom_data=["libelle_grand_domaine", "nb_appellations", "nb_metiers"]
 )
@@ -175,7 +211,10 @@ fig_comparaison.update_layout(
     height=600,
     title_x=0.02,
     coloraxis_showscale=False,
-    margin=dict(l=40, r=40, t=70, b=40)
+    margin=dict(l=40, r=40, t=70, b=40),
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    font=dict(color=HOME_NAVY)
 )
 
 fig_top10_appellations = px.bar(
@@ -191,7 +230,7 @@ fig_top10_appellations = px.bar(
         "libelle_domaine_professionel": "Domaine professionnel"
     }
 )
-fig_top10_appellations.update_traces(marker_color="#2E86AB", textposition="outside")
+fig_top10_appellations.update_traces(marker_color=HOME_BLUE, textposition="outside")
 fig_top10_appellations.update_layout(
     template="plotly_white",
     height=550,
@@ -200,7 +239,10 @@ fig_top10_appellations.update_layout(
     xaxis_title="Nombre d'appellations",
     yaxis_title="",
     margin=dict(l=260, r=80, t=70, b=50),
-    bargap=0.25
+    bargap=0.25,
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    font=dict(color=HOME_NAVY)
 )
 
 # ════════════════════════════════════════════════════════════════════

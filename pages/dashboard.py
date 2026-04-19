@@ -582,6 +582,7 @@ def build_axe34_layout():
         render_axe4(),
     ], style={"padding": "40px 60px", "backgroundColor": "white"})
 
+
 # ════════════════════════════════════════════════════════════════════
 # LAYOUT GLOBAL
 # ════════════════════════════════════════════════════════════════════
@@ -590,18 +591,34 @@ layout = html.Div([
     dcc.Tabs(
         id="tabs-axes",
         value="axe1",
-        style={"marginBottom": "20px"},
+        parent_className="dashboard-tabs-wrapper",
+        className="dashboard-tabs-container",
         children=[
-            dcc.Tab(label="Axe 1 - Panorama", value="axe1"),
-            dcc.Tab(label="Axe 2 - Compétences", value="axe2"),
-            dcc.Tab(label="Axes 3/4 - Mobilités", value="axe3"),
+            dcc.Tab(
+                label="Axe 1 - Panorama",
+                value="axe1",
+                className="dashboard-tab",
+                selected_className="dashboard-tab--selected",
+            ),
+            dcc.Tab(
+                label="Axe 2 - Compétences",
+                value="axe2",
+                className="dashboard-tab",
+                selected_className="dashboard-tab--selected",
+            ),
+            dcc.Tab(
+                label="Axes 3/4 - Mobilités",
+                value="axe3",
+                className="dashboard-tab",
+                selected_className="dashboard-tab--selected",
+            ),
         ],
     ),
 
     html.Div(id="content-axe1", children=build_axe1_layout()),
     html.Div(id="content-axe2", style={"display": "none"}, children=build_axe2_layout()),
     html.Div(id="content-axe3", style={"display": "none"}, children=build_axe34_layout()),
-], style={
+], className="dashboard-page", style={
     "fontFamily": "Segoe UI, -apple-system, sans-serif",
     "backgroundColor": "#f8f9fb"
 })

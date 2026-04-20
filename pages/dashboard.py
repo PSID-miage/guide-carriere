@@ -353,39 +353,7 @@ def build_axe1_layout():
             ], lg=4)
         ], className="mb-4"),
 
-        dbc.Row([
-            dbc.Col([
-                dbc.Card([
-                    dbc.CardHeader(
-                        html.Strong("MÉTIERS LIÉS AUX TRANSITIONS"),
-                        style={"backgroundColor": "white", "borderBottom": "1px solid #f1f2f6"}
-                    ),
-                    dbc.CardBody([
-                        dcc.Loading(
-                            dcc.Graph(id='g2-transitions', figure=make_transitions_figure("Transition écologique")),
-                            type="dot",
-                            color="#2980b9"
-                        )
-                    ])
-                ], className="border-0 shadow-sm", style={"borderRadius": "8px"})
-            ], lg=6),
-
-            dbc.Col([
-                dbc.Card([
-                    dbc.CardHeader(
-                        html.Strong("EMPLOIS CADRE & RÉGLEMENTÉS"),
-                        style={"backgroundColor": "white", "borderBottom": "1px solid #f1f2f6"}
-                    ),
-                    dbc.CardBody([
-                        dcc.Loading(
-                            dcc.Graph(id='g3-autres', figure=make_autres_figure()),
-                            type="dot",
-                            color="#2980b9"
-                        )
-                    ])
-                ], className="border-0 shadow-sm", style={"borderRadius": "8px"})
-            ], lg=6)
-        ], className="mb-4"),
+       
 
         dbc.Row([
             dbc.Col([
@@ -420,7 +388,41 @@ def build_axe1_layout():
                 ], className="border-0 shadow-sm", style={"borderRadius": "8px"})
             ], lg=6)
         ], className="mb-4"),
+        
+        dbc.Row([
+            dbc.Col([
+                dbc.Card([
+                    dbc.CardHeader(
+                        html.Strong("MÉTIERS LIÉS AUX TRANSITIONS"),
+                        style={"backgroundColor": "white", "borderBottom": "1px solid #f1f2f6"}
+                    ),
+                    dbc.CardBody([
+                        dcc.Loading(
+                            dcc.Graph(id='g2-transitions', figure=make_transitions_figure("Transition écologique")),
+                            type="dot",
+                            color="#2980b9"
+                        )
+                    ])
+                ], className="border-0 shadow-sm", style={"borderRadius": "8px"})
+            ], lg=6),
 
+            dbc.Col([
+                dbc.Card([
+                    dbc.CardHeader(
+                        html.Strong("EMPLOIS CADRE & RÉGLEMENTÉS"),
+                        style={"backgroundColor": "white", "borderBottom": "1px solid #f1f2f6"}
+                    ),
+                    dbc.CardBody([
+                        dcc.Loading(
+                            dcc.Graph(id='g3-autres', figure=make_autres_figure()),
+                            type="dot",
+                            color="#2980b9"
+                        )
+                    ])
+                ], className="border-0 shadow-sm", style={"borderRadius": "8px"})
+            ], lg=6)
+        ], className="mb-4"),
+        
         dbc.Card([
             dbc.CardHeader(
                 html.Strong("LISTE DES MÉTIERS PAR CARACTÉRISTIQUE"),

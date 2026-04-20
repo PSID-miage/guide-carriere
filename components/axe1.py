@@ -7,8 +7,20 @@ def load_csv(file_path: str) -> pd.DataFrame:
     return df
 
 
-def is_active(series: pd.Series) -> pd.Series:
-    return series.notna() & (series.astype(str).str.strip() != "")
+def is_oui(series: pd.Series) -> pd.Series:
+    valeurs = series.fillna("").astype(str).str.strip().str.upper()
+    return valeurs == "O"
+
+
+def is_transition_eco_positive(series: pd.Series) -> pd.Series:
+    valeurs = series.fillna("").astype(str).str.strip().str.lower()
+
+    valeurs_positives = {
+        "emploi vert",
+        "emploi stratégique pour la transition écologique"
+    }
+
+    return valeurs.isin(valeurs_positives)
 
 
 def build_caracteristiques_metiers(
@@ -33,15 +45,15 @@ def build_caracteristiques_metiers(
     blocs = []
 
     mapping = {
-        "Transition numérique": "transition_num",
-        "Transition écologique": "transition_eco",
-        "Transition démographique": "transition_demo",
-        "Emploi cadre": "emploi_cadre",
-        "Emploi réglementé": "emploi_reglemente",
+        "Transition numérique": ("transition_num", is_oui),
+        "Transition écologique": ("transition_eco", is_transition_eco_positive),
+        "Transition démographique": ("transition_demo", is_oui),
+        "Emploi cadre": ("emploi_cadre", is_oui),
+        "Emploi réglementé": ("emploi_reglemente", is_oui),
     }
 
-    for label, col in mapping.items():
-        temp = df[is_active(df[col])].copy()
+    for label, (col, condition_fn) in mapping.items():
+        temp = df[condition_fn(df[col])].copy()
         temp["caracteristique"] = label
         blocs.append(
             temp[
@@ -124,11 +136,11 @@ def prepare_axe1_data(data_path: str = "data/") -> dict:
 
     # Tags / donuts
     tags = {
-        "Transition numérique": df_rome[is_active(df_rome["transition_num"])]["code_rome"].nunique(),
-        "Transition écologique": df_rome[is_active(df_rome["transition_eco"])]["code_rome"].nunique(),
-        "Transition démographique": df_rome[is_active(df_rome["transition_demo"])]["code_rome"].nunique(),
-        "Emploi cadre": df_rome[is_active(df_rome["emploi_cadre"])]["code_rome"].nunique(),
-        "Emploi réglementé": df_rome[is_active(df_rome["emploi_reglemente"])]["code_rome"].nunique(),
+        "Transition numérique": df_rome[is_oui(df_rome["transition_num"])]["code_rome"].nunique(),
+        "Transition écologique": df_rome[is_transition_eco_positive(df_rome["transition_eco"])]["code_rome"].nunique(),
+        "Transition démographique": df_rome[is_oui(df_rome["transition_demo"])]["code_rome"].nunique(),
+        "Emploi cadre": df_rome[is_oui(df_rome["emploi_cadre"])]["code_rome"].nunique(),
+        "Emploi réglementé": df_rome[is_oui(df_rome["emploi_reglemente"])]["code_rome"].nunique(),
     }
 
     tags_metiers = pd.DataFrame({

@@ -500,12 +500,12 @@ def build_axe2_layout():
             dbc.Col([
                 dbc.Card([
                     dbc.CardHeader(
-                        html.Strong("TOP 15 COMPÉTENCES TRANSVERSALES"),
+                        html.Strong("RÉPARTITION DES CATÉGORIES"),
                         style={"backgroundColor": "white", "borderBottom": "1px solid #f1f2f6"}
                     ),
                     dbc.CardBody([
                         dcc.Loading(
-                            dcc.Graph(id='g6-top-comp', figure=fig_top_comp),
+                            dcc.Graph(id='g6b-cat', figure=fig_cat_dist),
                             type="dot",
                             color="#27ae60"
                         )
@@ -516,12 +516,12 @@ def build_axe2_layout():
             dbc.Col([
                 dbc.Card([
                     dbc.CardHeader(
-                        html.Strong("RÉPARTITION DES CATÉGORIES"),
+                        html.Strong("SOUS-CATÉGORIES"),
                         style={"backgroundColor": "white", "borderBottom": "1px solid #f1f2f6"}
                     ),
                     dbc.CardBody([
                         dcc.Loading(
-                            dcc.Graph(id='g6b-cat', figure=fig_cat_dist),
+                            dcc.Graph(id='g6c-subcat', figure=fig_sub_dist),
                             type="dot",
                             color="#27ae60"
                         )
@@ -534,12 +534,12 @@ def build_axe2_layout():
             dbc.Col([
                 dbc.Card([
                     dbc.CardHeader(
-                        html.Strong("SOUS-CATÉGORIES"),
+                        html.Strong("TOP 15 COMPÉTENCES TRANSVERSALES"),
                         style={"backgroundColor": "white", "borderBottom": "1px solid #f1f2f6"}
                     ),
                     dbc.CardBody([
                         dcc.Loading(
-                            dcc.Graph(id='g6c-subcat', figure=fig_sub_dist),
+                            dcc.Graph(id='g6-top-comp', figure=fig_top_comp),
                             type="dot",
                             color="#27ae60"
                         )

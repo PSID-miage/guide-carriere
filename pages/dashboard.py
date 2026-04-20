@@ -359,7 +359,7 @@ def build_axe1_layout():
             dbc.Col([
                 dbc.Card([
                     dbc.CardHeader(
-                        html.Strong("VOLUME D'APPELLATIONS PAR DOMAINE"),
+                        html.Strong("VOLUME D'APPELLATIONS PAR GRAND DOMAINE"),
                         style={"backgroundColor": "white", "borderBottom": "1px solid #f1f2f6"}
                     ),
                     dbc.CardBody([

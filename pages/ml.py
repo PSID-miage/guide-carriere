@@ -1,487 +1,238 @@
-
-import re
+import pandas as pd
+import base64
+import io
 import dash
 import dash_bootstrap_components as dbc
 from dash import html, dcc, Input, Output, State, callback, ctx
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from urllib.parse import parse_qs, unquote
+import os
+
+# Import pour l'extraction de texte PDF (Analyse de CV)
+try:
+    import PyPDF2
+except ImportError:
+    PyPDF2 = None
 
 dash.register_page(__name__, path="/ml", name="Analyse Profil")
 
-SKILL_OPTIONS = [
-    {"label": "Python", "value": "python"},
-    {"label": "SQL", "value": "sql"},
-    {"label": "Excel / Reporting", "value": "excel"},
-    {"label": "Power BI / DataViz", "value": "powerbi"},
-    {"label": "Machine Learning", "value": "ml"},
-    {"label": "Communication", "value": "communication"},
-    {"label": "Gestion de projet", "value": "gestion_projet"},
-    {"label": "Analyse de données", "value": "analyse_donnees"},
-    {"label": "Support client", "value": "support_client"},
-    {"label": "Saisie administrative", "value": "saisie_admin"},
-    {"label": "Automatisation / Scripts", "value": "automatisation"},
-    {"label": "Travail terrain", "value": "terrain"},
-    {"label": "Pédagogie / Formation", "value": "pedagogie"},
-    {"label": "Organisation", "value": "organisation"},
-]
+# ==========================================================
+# PARTIE 1 : MOTEUR DE MACHINE LEARNING (LOGIQUE NLP)
+# ==========================================================
 
-TARGET_JOBS = [
-    {"label": "Data Analyst", "value": "Data Analyst"},
-    {"label": "Business Analyst", "value": "Business Analyst"},
-    {"label": "Chargé de projet digital", "value": "Chargé de projet digital"},
-    {"label": "Product Operations", "value": "Product Operations"},
-    {"label": "Consultant BI", "value": "Consultant BI"},
-    {"label": "Chef de projet IA / Data", "value": "Chef de projet IA / Data"},
-]
+class ROMEAIEngine:
+    def __init__(self, data_path="data/"):
+        self.data_path = data_path
+        self.df_trained = self._build_knowledge_base()
+        
+        if self.df_trained.empty:
+            self.df_trained = pd.DataFrame({
+                'libelle_rome': ['Dataset non chargé'], 
+                'code_rome': ['N/A'], 
+                'all_text_knowledge': [''],
+                'transition_num': [0]
+            })
 
-KEYWORD_MAP = {
-    "python": [r"\bpython\b"],
-    "sql": [r"\bsql\b", r"\bmysql\b", r"\bpostgres\b"],
-    "excel": [r"\bexcel\b", r"\breporting\b", r"\btableaux?\b"],
-    "powerbi": [r"\bpower\s?bi\b", r"\bdataviz\b", r"\bvisualisation\b"],
-    "ml": [r"\bmachine learning\b", r"\bdeep learning\b", r"\bmod[eè]le\b"],
-    "communication": [r"\bcommunication\b", r"\bprésentation\b", r"\banimation\b"],
-    "gestion_projet": [r"\bgestion de projet\b", r"\bpilotage\b", r"\bcoordination\b"],
-    "analyse_donnees": [r"\banalyse de donn[ée]es\b", r"\bdata analysis\b", r"\bkpi\b"],
-    "support_client": [r"\bsupport client\b", r"\bservice client\b", r"\brelation client\b"],
-    "saisie_admin": [r"\bsaisie\b", r"\badministratif\b", r"\bback office\b"],
-    "automatisation": [r"\bautomatisation\b", r"\bscript\b", r"\bworkflow\b"],
-    "terrain": [r"\bterrain\b", r"\bopérationnel\b", r"\bintervention\b"],
-    "pedagogie": [r"\bformation\b", r"\bpédagogie\b", r"\btransmission\b"],
-    "organisation": [r"\borganisation\b", r"\bplanification\b", r"\bprocess\b"],
-}
+        self.vectorizer = TfidfVectorizer(
+            ngram_range=(1, 3),
+            stop_words=['ce', 'le', 'la', 'de', 'du', 'en', 'et', 'un', 'une', 'des', 'les', 'pour']
+        )
+        self.tfidf_matrix = self.vectorizer.fit_transform(self.df_trained['all_text_knowledge'])
 
-SKILL_LABELS = {item["value"]: item["label"] for item in SKILL_OPTIONS}
+    def _build_knowledge_base(self):
+        try:
+            def safe_read(name):
+                path = os.path.join(self.data_path, name)
+                if not os.path.exists(path): return pd.DataFrame()
+                return pd.read_csv(path, sep=None, engine='python', encoding='utf-8', on_bad_lines='skip')
 
+            df_rome = safe_read("unix_referentiel_code_rome_v460_utf8.csv")
+            df_liens = safe_read("unix_liens_rome_referentiels_v460_utf8.csv")
+            df_comp = safe_read("unix_referentiel_competence_v460_utf8.csv")
+            df_savoir = safe_read("unix_referentiel_savoir_v460_utf8.csv")
 
-def extract_skills_from_cv(text):
-    if not text:
-        return []
+            if df_rome.empty: return pd.DataFrame()
+            for df in [df_rome, df_liens, df_comp, df_savoir]:
+                if not df.empty: df.columns = df.columns.str.strip()
 
-    text = text.lower()
-    found = []
-    for skill, patterns in KEYWORD_MAP.items():
-        for pattern in patterns:
-            if re.search(pattern, text):
-                found.append(skill)
-                break
-    return found
+            comp_merged = df_liens[df_liens['code_compo_bloc'] == 5].merge(df_comp, on='code_ogr', how='inner')
+            agg_comp = comp_merged.groupby('code_rome')['libelle_competence'].apply(list).reset_index()
 
+            savoir_merged = df_liens.merge(df_savoir, left_on='code_ogr', right_on='code_ogr_savoir', how='inner')
+            agg_savoir = savoir_merged.groupby('code_rome')['libelle_savoir'].apply(list).reset_index()
 
-def compute_demo_risk(skills):
-    high_risk = {"saisie_admin", "excel", "support_client"}
-    low_risk = {"communication", "gestion_projet", "pedagogie", "terrain"}
-    future_ready = {"python", "sql", "powerbi", "ml", "analyse_donnees", "automatisation"}
+            final_df = df_rome.merge(agg_comp, on='code_rome', how='left')
+            final_df = final_df.merge(agg_savoir, on='code_rome', how='left')
+            
+            final_df['all_text_knowledge'] = (
+                final_df['libelle_rome'].fillna('') + " " + 
+                final_df['libelle_competence'].apply(lambda x: " ".join(x) if isinstance(x, list) else "") + " " + 
+                final_df['libelle_savoir'].apply(lambda x: " ".join(x) if isinstance(x, list) else "")
+            ).str.lower().str.strip()
+            return final_df
+        except: return pd.DataFrame()
 
-    score = 50
+    def predict(self, user_input, top_n=3):
+        if not user_input or len(user_input) < 10: return []
+        user_vec = self.vectorizer.transform([user_input.lower()])
+        similarities = cosine_similarity(user_vec, self.tfidf_matrix).flatten()
+        best_indices = similarities.argsort()[-top_n:][::-1]
+        results = []
+        for i in best_indices:
+            if similarities[i] > 0.02:
+                row = self.df_trained.iloc[i]
+                results.append({'metier': row['libelle_rome'], 'code': row['code_rome'], 'score': round(similarities[i] * 100, 1)})
+        return results
 
-    for skill in skills:
-        if skill in high_risk:
-            score += 12
-        if skill in low_risk:
-            score -= 10
-        if skill in future_ready:
-            score -= 8
+    # --- LOGIQUE ML POUR LE BAS DE FICHE ---
+    def get_ia_impact(self, row):
+        content = str(row['all_text_knowledge'])
+        ia_keywords = ['analyser', 'données', 'statistiques', 'prévision', 'algorithme', 'calcul', 'numérique']
+        score = sum(1 for kw in ia_keywords if kw in content)
+        if score >= 3: return "Élevé", "Forte mutation des tâches via l'automatisation des données."
+        return "Modéré", "L'IA assiste les tâches de gestion et d'analyse d'informations."
 
-    score = max(10, min(score, 90))
+    def get_passerelles(self, code_rome):
+        idx = self.df_trained[self.df_trained['code_rome'] == code_rome].index[0]
+        sims = cosine_similarity(self.tfidf_matrix[idx], self.tfidf_matrix).flatten()
+        related = sims.argsort()[-4:-1][::-1]
+        return self.df_trained.iloc[related]['libelle_rome'].tolist()
 
-    if score >= 65:
-        level = "Fort"
-        reason = "Le profil contient plusieurs tâches potentiellement standardisables ou automatisables."
-    elif score >= 40:
-        level = "Moyen"
-        reason = "Le profil combine des tâches partiellement automatisables et des compétences plus différenciantes."
-    else:
-        level = "Faible"
-        reason = "Le profil repose davantage sur l’analyse, la coordination, la communication ou des compétences techniques à forte valeur."
-    return level, score, reason
+    def get_skill_gap(self, user_text, code_rome):
+        row = self.df_trained[self.df_trained['code_rome'] == code_rome].iloc[0]
+        skills = row['libelle_competence']
+        if not skills or not user_text: return ["Analyse impossible"]
+        gap = [s for s in skills if s.lower() not in str(user_text).lower()]
+        return gap[:3]
 
+engine = ROMEAIEngine()
 
-def build_result_card(title, content, icon):
-    return html.Div(
-        [
-            html.Div(icon, className="result-icon"),
-            html.Div(
-                [
-                    html.Div(title, className="result-card-title"),
-                    content,
-                ],
-                className="result-card-body",
-            ),
-        ],
-        className="glass-card result-card",
-    )
+# ==========================================================
+# PARTIE 2 : INTERFACE
+# ==========================================================
 
+def get_ml_main_layout():
+    return html.Div([
+        html.Div([
+            html.H1(["Analyse Profil & ", html.Span("Machine Learning", className="gradient-text")]),
+            html.P("Découvrez les métiers du ROME qui correspondent à votre expérience.")
+        ], className="analysis-hero text-center mb-5"),
+        dbc.Row([
+            dbc.Col([
+                html.Div([
+                    html.Div([
+                        html.Button("Texte libre", id="mode-cv-btn", n_clicks=1, className="mode-btn active"),
+                        html.Button("Upload PDF", id="mode-pdf-btn", n_clicks=0, className="mode-btn"),
+                    ], className="mode-switch mb-4"),
+                    html.Div([
+                        html.Div([dcc.Textarea(id="cv-text", className="modern-textarea", placeholder="Collez vos compétences...")], id="cv-panel"),
+                        html.Div([dcc.Upload(id="upload-data", children=html.Div(['Cliquez pour uploader']), className="pdf-upload-zone")], id="pdf-panel", style={"display": "none"}),
+                        dbc.Button("Exécuter l'Analyse", id="analyze-btn", className="hero-primary-btn mt-4"),
+                    ], className="glass-card p-4")
+                ])
+            ], lg=8)
+        ], justify="center"),
+        html.Div(id="analysis-preview", className="mt-5")
+    ])
 
-layout = html.Div(
-    [
-        html.Div(className="bg-orb orb-1"),
-        html.Div(className="bg-orb orb-2"),
-        html.Div(className="bg-orb orb-3"),
+def get_fiche_metier_layout(job_code, user_data):
+    row = engine.df_trained[engine.df_trained['code_rome'] == job_code].iloc[0]
+    ia_val, ia_txt = engine.get_ia_impact(row)
+    passerelles = engine.get_passerelles(job_code)
+    gap = engine.get_skill_gap(user_data, job_code)
 
-        dbc.Container(
-            [
-                html.Div(
-                    [
-                        html.Div(
-                            [
-                                html.Div("Career Navigator", className="brand-title"),
-                                html.Div("Page analyse guidée", className="brand-subtitle"),
-                            ],
-                            className="brand-block",
-                        ),
-                        html.Div(
-                            [
-                                dbc.Button("Accueil", href="/", className="nav-ghost-btn"),
-                                dbc.Button("Dashboard", href="/dashboard", className="nav-primary-btn"),
-                            ],
-                            className="nav-actions",
-                        ),
-                    ],
-                    className="top-nav-modern",
-                ),
+    return html.Div([
+        dcc.Link("← Retour", href="/ml", className="back-link mb-4"),
+        html.H1(row['libelle_rome'], className="gradient-text mb-5"),
+        
+        dbc.Row([
+            dbc.Col(html.Div([
+                html.Div("Savoir-faire opérationnels", className="result-card-title"),
+                html.Ul([html.Li(c, className="list-item-ml") for c in row['libelle_competence'][:10]])
+            ], className="glass-card p-4"), lg=6),
+            dbc.Col(html.Div([
+                html.Div("Savoirs théoriques", className="result-card-title"),
+                html.Ul([html.Li(s, className="list-item-ml") for s in row['libelle_savoir'][:10]])
+            ], className="glass-card p-4"), lg=6),
+        ]),
 
-                html.Div(
-                    [
-                        html.Div("Analyse profil", className="eyebrow-pill"),
-                        html.H1(
-                            ["Renseigne ton profil avec une ", html.Span("expérience guidée", className="gradient-text")],
-                            className="hero-title small-hero-title",
-                        ),
-                       
-                    ],
-                    className="analysis-hero",
-                ),
+        html.Div([
+            dbc.Row([
+                dbc.Col(html.Div([
+                    html.Div("1. Score d'Exposition IA", className="footer-card-title"),
+                    html.H3(ia_val, style={"color": "#00d4ff"}), html.P(ia_txt, className="footer-desc")
+                ], className="footer-sub-card"), lg=4),
+                dbc.Col(html.Div([
+                    html.Div("2. Métiers Voisins", className="footer-card-title"),
+                    html.H3("Passerelles", className="footer-main-val"),
+                    html.Ul([html.Li(p, className="footer-desc") for p in passerelles])
+                ], className="footer-sub-card"), lg=4),
+                dbc.Col(html.Div([
+                    html.Div("3. Plan de Montée", className="footer-card-title"),
+                    html.H3("Skill Gap", className="footer-main-val"),
+                    html.Ul([html.Li(g, className="footer-desc", style={"color":"#e5e8ec"}) for g in gap])
+                ], className="footer-sub-card"), lg=4),
+            ])
+        ], className="footer-analysis-zone mt-4")
+    ])
 
-                dbc.Row(
-                    [
-                        dbc.Col(
-                            [
-                                html.Div(
-                                    [
-                                        html.Div(
-                                            [
-                                                html.Button("Liste guidée", id="mode-skills-btn", n_clicks=1, className="mode-btn active"),
-                                                html.Button("Copie colle ton CV", id="mode-cv-btn", n_clicks=0, className="mode-btn"),
-                                            ],
-                                            className="mode-switch",
-                                        ),
+# ==========================================================
+# PARTIE 3 : ROUTING & CALLBACKS
+# ==========================================================
 
-                                        html.Div(
-                                            [
-                                                html.Div(
-                                                    [
-                                                        html.Label("Sélectionne tes compétences", className="field-label"),
-                                                        dcc.Dropdown(
-                                                            id="skills-dropdown",
-                                                            options=SKILL_OPTIONS,
-                                                            multi=True,
-                                                            placeholder="Choisis une ou plusieurs compétences",
-                                                            className="modern-dropdown",
-                                                        ),
-                                                        html.Div(
-                                                            "Astuce : commence avec 4 à 8 compétences principales pour un rendu plus lisible.",
-                                                            className="field-help",
-                                                        ),
-                                                    ],
-                                                    id="skills-panel",
-                                                    className="input-panel",
-                                                ),
-
-                                                html.Div(
-                                                    [
-                                                        html.Label("Colle ici le texte du CV", className="field-label"),
-                                                        dcc.Textarea(
-                                                            id="cv-text",
-                                                            placeholder="Exemple : Data analyst junior, reporting Excel, SQL, dashboarding, coordination projet...",
-                                                            className="modern-textarea",
-                                                        ),
-                                                        
-                                                    ],
-                                                    id="cv-panel",
-                                                    className="input-panel",
-                                                    style={"display": "none"},
-                                                ),
-
-                                                html.Div(
-                                                    [
-                                                        html.Label("Métier cible", className="field-label"),
-                                                        dcc.Dropdown(
-                                                            id="target-job",
-                                                            options=TARGET_JOBS,
-                                                            placeholder="Choisis un métier cible",
-                                                            className="modern-dropdown",
-                                                        ),
-                                                    ],
-                                                    className="input-panel",
-                                                ),
-
-                                                html.Div(
-                                                    [
-                                                        dbc.Button("Lancer une prévisualisation", id="analyze-btn", className="hero-primary-btn"),
-                                                        dbc.Button("Réinitialiser", id="reset-btn", className="hero-secondary-btn"),
-                                                    ],
-                                                    className="analysis-actions",
-                                                ),
-                                            ],
-                                            className="glass-card input-card",
-                                        )
-                                    ]
-                                )
-                            ],
-                            lg=8,
-                            className="mb-4",
-                        ),
-                        dbc.Col(
-                            [
-                                html.Div(
-                                    [
-                                        html.Div("Sorties prévues", className="section-kicker"),
-                                        html.H3("Ce que l’outil retournera", className="side-title"),
-                                        html.Div(
-                                            [
-                                                html.Div(
-                                                    [
-                                                        html.Div("1", className="mini-step"),
-                                                        html.Div(
-                                                            [
-                                                                html.Div("Score d’exposition IA", className="mini-step-title"),
-                                                                html.Div("Faible / moyen / fort avec justification.", className="mini-step-text"),
-                                                            ]
-                                                        ),
-                                                    ],
-                                                    className="mini-step-card",
-                                                ),
-                                                html.Div(
-                                                    [
-                                                        html.Div("2", className="mini-step"),
-                                                        html.Div(
-                                                            [
-                                                                html.Div("Métiers voisins", className="mini-step-title"),
-                                                                html.Div("Alternatives plus résilientes et passerelles.", className="mini-step-text"),
-                                                            ]
-                                                        ),
-                                                    ],
-                                                    className="mini-step-card",
-                                                ),
-                                                html.Div(
-                                                    [
-                                                        html.Div("3", className="mini-step"),
-                                                        html.Div(
-                                                            [
-                                                                html.Div("Plan de montée en compétences", className="mini-step-title"),
-                                                                html.Div("Skill gap entre profil actuel et métier cible.", className="mini-step-text"),
-                                                            ]
-                                                        ),
-                                                    ],
-                                                    className="mini-step-card",
-                                                ),
-                                            ]
-                                        ),
-                                    
-                                    ],
-                                    className="glass-card side-card",
-                                )
-                            ],
-                            lg=4,
-                            className="mb-4",
-                        ),
-                    ]
-                ),
-
-                html.Div(
-                    id="analysis-preview",
-                    className="results-zone",
-                    children=[
-                        html.Div(
-                            [
-                                html.Div("Prévisualisation", className="section-kicker"),
-                                html.H2("La restitution apparaîtra ici après clic.", className="section-title"),
-                                
-                            ],
-                            className="glass-card placeholder-card",
-                        )
-                    ],
-                ),
-            ],
-            fluid=True,
-            className="landing-container",
-        ),
-    ],
-    className="page-home-modern",
-)
-
+layout = html.Div([
+    dcc.Location(id='url-ml', refresh=False),
+    html.Div(id='page-content-ml', className="landing-container")
+])
 
 @callback(
-    Output("skills-panel", "style"),
-    Output("cv-panel", "style"),
-    Output("mode-skills-btn", "className"),
-    Output("mode-cv-btn", "className"),
-    Input("mode-skills-btn", "n_clicks"),
-    Input("mode-cv-btn", "n_clicks"),
+    Output('page-content-ml', 'children'),
+    [Input('url-ml', 'search')],
+    [State('cv-data-store', 'data')] # Utilisation de ton ID existant
 )
-def toggle_mode(n_skills, n_cv):
-    trigger = ctx.triggered_id
-
-    if trigger == "mode-cv-btn":
-        return {"display": "block"}, {"display": "block"}, "mode-btn", "mode-btn active"
-
-    return {"display": "block"}, {"display": "none"}, "mode-btn active", "mode-btn"
-
+def router(search, store_data):
+    if search:
+        params = parse_qs(search.lstrip('?'))
+        if 'code' in params: return get_fiche_metier_layout(unquote(params['code'][0]), store_data)
+    return get_ml_main_layout()
 
 @callback(
-    Output("skills-dropdown", "value"),
-    Output("cv-text", "value"),
-    Output("target-job", "value"),
-    Input("reset-btn", "n_clicks"),
-    prevent_initial_call=True,
+    [Output("cv-panel", "style"), Output("pdf-panel", "style"),
+     Output("mode-cv-btn", "className"), Output("mode-pdf-btn", "className")],
+    [Input("mode-cv-btn", "n_clicks"), Input("mode-pdf-btn", "n_clicks")]
 )
-def reset_form(_):
-    return [], "", None
-
+def toggle_mode(n1, n2):
+    if ctx.triggered_id == "mode-pdf-btn":
+        return {"display":"none"}, {"display":"block"}, "mode-btn", "mode-btn active"
+    return {"display":"block"}, {"display":"none"}, "mode-btn active", "mode-btn"
 
 @callback(
-    Output("analysis-preview", "children"),
+    [Output("analysis-preview", "children"), Output("cv-data-store", "data")], # Sauvegarde dans ton ID existant
     Input("analyze-btn", "n_clicks"),
-    State("skills-dropdown", "value"),
     State("cv-text", "value"),
-    State("target-job", "value"),
+    State("upload-data", "contents"),
     State("mode-cv-btn", "className"),
 )
-def preview_analysis(n_clicks, skills, cv_text, target_job, cv_mode_class):
-    if not n_clicks:
-        raise dash.exceptions.PreventUpdate
+def execute_analysis(n, text, pdf, c1):
+    if not n: raise dash.exceptions.PreventUpdate
+    source = text if "active" in c1 else ""
+    if not source and pdf:
+        content_string = pdf.split(',')[1]
+        decoded = base64.b64decode(content_string)
+        reader = PyPDF2.PdfReader(io.BytesIO(decoded))
+        source = " ".join([p.extract_text() for p in reader.pages])
 
-    is_cv_mode = "active" in (cv_mode_class or "")
-    selected_skills = skills or []
+    recs = engine.predict(source)
+    if not recs: return dbc.Alert("Analyse impossible."), source
 
-    if is_cv_mode:
-        extracted = extract_skills_from_cv(cv_text or "")
-        selected_skills = extracted
-
-    readable_skills = [SKILL_LABELS[s] for s in selected_skills if s in SKILL_LABELS]
-    level, score, reason = compute_demo_risk(selected_skills)
-
-    if target_job:
-        if target_job == "Data Analyst":
-            missing = ["SQL", "Power BI / DataViz", "Analyse de données"]
-        elif target_job == "Consultant BI":
-            missing = ["Power BI / DataViz", "SQL", "Communication"]
-        elif target_job == "Chef de projet IA / Data":
-            missing = ["Gestion de projet", "Communication", "Machine Learning"]
-        else:
-            missing = ["Gestion de projet", "Analyse de données", "Communication"]
-    else:
-        missing = ["Choisis un métier cible pour calculer un skill gap plus réaliste"]
-
-    nearby_jobs = ["Business Analyst", "Consultant BI", "Product Operations"]
-    if "python" in selected_skills or "analyse_donnees" in selected_skills:
-        nearby_jobs = ["Data Analyst", "BI Analyst", "Chargé d’études"]
-    if "gestion_projet" in selected_skills or "communication" in selected_skills:
-        nearby_jobs = ["Chef de projet digital", "Product Operations", "Consultant fonctionnel"]
-
-    summary_text = (
-        "Mode CV texte activé. Compétences détectées automatiquement : "
-        if is_cv_mode else
-        "Mode liste guidée activé. Compétences sélectionnées : "
-    )
-
-    return [
-        html.Div(
-            [
-                html.Div("Résultat démo", className="section-kicker"),
-                html.H2("Une restitution plus premium, claire et actionnable.", className="section-title"),
-                html.P(
-                    "Cette sortie est une simulation UX pour travailler le produit",
-                    className="section-text",
-                ),
-            ],
-            className="section-heading",
-        ),
-        dbc.Row(
-            [
-                dbc.Col(
-                    build_result_card(
-                        "Profil détecté",
-                        html.Div(
-                            [
-                                html.P(summary_text, className="result-text"),
-                                html.Div(
-                                    [html.Span(skill, className="result-chip") for skill in readable_skills] or
-                                    [html.Span("Aucune compétence détectée pour l’instant", className="result-chip muted-chip")],
-                                    className="result-chip-row",
-                                ),
-                            ]
-                        ),
-                        "🧩",
-                    ),
-                    lg=4,
-                    className="mb-4",
-                ),
-                dbc.Col(
-                    build_result_card(
-                        "Exposition IA / automatisation",
-                        html.Div(
-                            [
-                                html.Div(f"{level} • {score}/100", className="result-score"),
-                                html.P(reason, className="result-text"),
-                            ]
-                        ),
-                        "🤖",
-                    ),
-                    lg=4,
-                    className="mb-4",
-                ),
-                dbc.Col(
-                    build_result_card(
-                        "Métiers voisins",
-                        html.Div(
-                            [
-                                html.Div(
-                                    [html.Span(job, className="result-chip") for job in nearby_jobs],
-                                    className="result-chip-row",
-                                ),
-                                html.P("Des alternatives plus résilientes ou proches peuvent être proposées ici.", className="result-text"),
-                            ]
-                        ),
-                        "🔁",
-                    ),
-                    lg=4,
-                    className="mb-4",
-                ),
-            ]
-        ),
-        dbc.Row(
-            [
-                dbc.Col(
-                    build_result_card(
-                        "Métier cible",
-                        html.Div(
-                            [
-                                html.Div(target_job or "Non renseigné", className="result-highlight"),
-                                html.P("Choisis un métier cible pour guider le skill gap.", className="result-text"),
-                            ]
-                        ),
-                        "🎯",
-                    ),
-                    lg=4,
-                    className="mb-4",
-                ),
-                dbc.Col(
-                    build_result_card(
-                        "Plan de montée en compétences",
-                        html.Div(
-                            [
-                                html.Div(
-                                    [html.Span(item, className="result-chip") for item in missing],
-                                    className="result-chip-row",
-                                ),
-                               
-                            ]
-                        ),
-                        "📈",
-                    ),
-                    lg=8,
-                    className="mb-4",
-                ),
-            ]
-        ),
-    ]
+    return html.Div([
+        dbc.Row([
+            dbc.Col([
+                html.Div([
+                    html.Span(r['metier'], className="result-highlight"),
+                    dcc.Link(" Fiche ➜", href=f"/ml?code={r['code']}", className="fiche-link")
+                ], className="glass-card p-3 mb-2") for r in recs
+            ], lg=7)
+        ])
+    ]), source

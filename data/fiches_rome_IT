@@ -1,0 +1,662 @@
+     code_rome                                                                    libelle_rome
+1398     M1801                 Administrateur / Administratrice de systèmes d'information (SI)
+1399     M1802                              Expert / Experte systèmes et réseaux informatiques
+1400     M1803                         Directeur / Directrice des systèmes d'information -DSI-
+1401     M1804                                                 Ingénieur / Ingénieure télécoms
+1402     M1805                                         Développeur / Développeuse informatique
+1403     M1806   Consultant fonctionnel / Consultante fonctionnelle des systèmes d'information
+1404     M1807                                       Opérateur / Opératrice télécom aux armées
+1405     M1808                                                                     Cartographe
+1406     M1809                                                                    Météorologue
+1407     M1810                           Technicien / Technicienne d'exploitation informatique
+1408     M1811                                                                   Data engineer
+1409     M1812                    Responsable de la Sécurité des Systèmes d'Information (RSSI)
+1410     M1813                                    Intégrateur / Intégratrice logiciels métiers
+1411     M1814                                                                    Scrum Master
+1412     M1815                          Spécialiste test et validation logiciel ou application
+1413     M1816                     Technicien / Technicienne réseaux informatiques et télécoms
+1414     M1817                          Administrateur / Administratrice sécurité informatique
+1415     M1818                                     Ingénieur / Ingénieure d'étude informatique
+1416     M1819                                    Ingénieur / Ingénieure sécurité informatique
+1417     M1820                               Expert / Experte méthodes et qualité informatique
+1418     M1821                                             Analyste d'application informatique
+1419     M1822                        Ingénieur / Ingénieure systèmes et réseaux informatiques
+1420     M1823                                            Consultant / Consultante avant-vente
+1421     M1824                  Développeur / Développeuse décisionnel - Business Intelligence
+1422     M1825                                  Coordinateur / Coordinatrice de production web
+1423     M1826                                Ingénieur / Ingénieure supervision IT Datacenter
+1424     M1827                                                   Ingénieur / Ingénieure DevOps
+1425     M1828                  Chef de projet / Cheffe de projet (Project Management Officer)
+1426     M1829            Ingénieur / Ingénieure systèmes et réseaux des territoires connectés
+1427     M1830                             Administrateur / Administratrice réseaux - télécoms
+1428     M1831                                         Développeur / Développeuse - jeux vidéo
+1429     M1832                            Homologateur / Homologatrice fonctionnel de logiciel
+1430     M1833                                             Ingénieur / Ingénieure sécurité web
+1431     M1834                               Administrateur / Administratrice de site internet
+1432     M1835                        Architecte systèmes et réseaux des territoires connectés
+1433     M1836                      Ingénieur concepteur / Ingénieure conceptrice informatique
+1434     M1837                                           Développeur / Développeuse multimédia
+1435     M1838                                            Urbaniste des systèmes d'information
+1436     M1839                                                  Architecte systèmes et réseaux
+1437     M1840                     Directeur / Directrice de projets des territoires connectés
+1438     M1841                            Ingénieur informaticien / Ingénieure informaticienne
+1439     M1842                            Qualiticien / Qualiticienne logiciel en informatique
+1440     M1843                                    Administrateur / Administratrice de serveurs
+1441     M1844                                                       Analyste en cybersécurité
+1442     M1845                                            Architecte IoT - Internet des Objets
+1443     M1846                                 Ingénieur / Ingénieure Cybersécurité Datacenter
+1444     M1847                                    Expert / Experte en communication et réseaux
+1445     M1848                                  Analyste Concepteur / Conceptrice informatique
+1446     M1849                                  Administrateur / Administratrice de messagerie
+1447     M1850                                              Architecte multimédias interactifs
+1448     M1851                                    Analyste décisionnel - Business Intelligence
+1449     M1852                                                   Analyste d'étude informatique
+1450     M1853                     Chef / Cheffe de projet étude et développement informatique
+1451     M1854                            Administrateur / Administratrice réseau informatique
+1452     M1855                                                  Développeur / Développeuse web
+1453     M1856                                               Expert / Experte en cybersécurité
+1454     M1857                                                            Urbaniste Datacenter
+1455     M1858                    Chef / Cheffe de projet TMA - Tierce Maintenance Applicative
+1456     M1859                           Chef / Cheffe de projet maîtrise d'œuvre informatique
+1457     M1860                                                                Architecte cloud
+1458     M1861                            Développeur / Développeuse logiciel ou d'application
+1459     M1862                                        Responsable d'exploitation fibre optique
+1460     M1863        Evaluateur / Evaluatrice sécurité des systèmes et produits informatiques
+1461     M1864                                                                   Product Owner
+1462     M1865                                               Ingénieur / Ingénieure blockchain
+1463     M1866                                                        Pentesteur / Pentesteuse
+1464     M1867                                     Responsable des systèmes d'information (SI)
+1465     M1868                                                      Architecte base de données
+1466     M1869                                               Gestionnaire de parc informatique
+1467     M1870                                Directeur / Directrice de projet en informatique
+1468     M1871                               Gestionnaire d'applications système d'information
+1469     M1872      Consultant décisionnel / Consultante décisionnelle - Business Intelligence
+1470     M1873                                                        Spécialiste IA embarquée
+1471     M1874                                                             Spécialiste support
+1472     M1875  Coordinateur / Coordinatrice Maitrise d'Ouvrage Système d'Information (MOA SI)
+1473     M1876                                                 Technicien / Technicienne Cloud
+1474     M1877                                           Développeur / Développeuse blockchain
+1475     M1878                                       Responsable de la production informatique
+1476     M1879                                          Ingénieur / Ingénieure Cloud computing
+1477     M1880                                                             Spécialiste e-santé
+1478     M1881     Chef / Cheffe de projet Maîtrise d'Ouvrage des Systèmes d'Information (MOA)
+1479     M1882                                                Architecte sécurité informatique
+1480     M1883                                       Analyste SOC (Security Operations Center)
+1481     M1884               Ingénieur / Ingénieure systèmes, réseaux et sécurité informatique
+1482     M1885                                                            Responsable télécoms
+1483     M1886                                                     Chef / Cheffe de projet Web
+1484     M1887                                                         Product builder no code
+1485     M1888                                          Spécialiste en modélisation climatique
+1486     M1889                        Ingénieur / Ingénieure en Intelligence Artificielle (IA)
+1487     M1890                              Responsable d'opérations en station météorologique
+1488     M1891                              Ingénieur / Ingénieure prévisionniste météorologue
+1489     M1892                                Ingénieur / Ingénieure en informatique embarquée
+1490     M1893                                    Technicien / Technicienne de la météorologie
+1491     M1894                                                 Gestionnaire de base de données
+      code_rome                                                                                                       libelle_appellation_long
+85        M1807                                                          Adjoint / Adjointe chef de centre de télétraitement mobile aux armées
+94        M1810                                                                                 Adjoint / Adjointe d'exploitation informatique
+98        M1810                                                         Adjoint technicien / Adjointe technicienne d'exploitation informatique
+99        M1808                                                                Administrateur / Administratrice bases de données géographiques
+100       M1894                                                                           Administrateur / Administratrice de bases de données
+104       M1849                                                                              Administrateur / Administratrice de la messagerie
+106       M1843                                                                                   Administrateur / Administratrice de serveurs
+107       M1834                                                                              Administrateur / Administratrice de site internet
+108       M1834                                                                                   Administrateur / Administratrice de site Web
+112       M1854                                                                           Administrateur / Administratrice réseau informatique
+113       M1830                                                                            Administrateur / Administratrice réseaux - télécoms
+114       M1817                                                                         Administrateur / Administratrice sécurité informatique
+115       M1801                                                                          Administrateur / Administratrice système informatique
+116       M1808                                                     Administrateur / Administratrice Systèmes d'Information Géographique -SIG-
+342       M1810                                                                                        Agent / Agente de planning informatique
+503       M1807                                        Agent / Agente d'exploitation des systèmes d'information et de communication aux armées
+510       M1810                                                                                     Agent / Agente d'exploitation informatique
+727       M1842                                                                     Analyste cogniticien / Analyste cogniticienne informatique
+728       M1848                                                                                 Analyste Concepteur / Conceptrice informatique
+729       M1821                                                                                                         Analyste d'application
+732       M1852                                                                                               Analyste de gestion informatique
+735       M1807                                                                                         Analyste de signaux électromagnétiques
+736       M1807                                                                              Analyste des services techniques du renseignement
+737       M1852                                                                                                  Analyste d'étude informatique
+738       M1805                                                                                   Analyste développeur / Analyste développeuse
+739       M1810                                                                                                        Analyste d'exploitation
+740       M1808                                                                                                         Analyste en géomatique
+744       M1852                                                                     Analyste fonctionnel / Analyste fonctionnelle informatique
+746       M1852                                                                                                Analyste organique informatique
+750       M1852                                                                                                   Analyste réseau informatique
+751       M1821                                                                                Analyste responsable d'application informatique
+753       M1852                                                                                                           Analyste télématique
+754       M1852                                                             Analyste-programmeur / Analyste-programmeuse de micro-informatique
+755       M1852                                                              Analyste-programmeur / Analyste-programmeuse d'étude informatique
+756       M1836                                                      Analyste-programmeur / Analyste-programmeuse en informatique industrielle
+757       M1805                                                              Analyste-programmeur / Analyste-programmeuse gestion informatique
+758       M1805                                                                      Analyste-programmeur / Analyste-programmeuse informatique
+759       M1805                                                         Analyste-programmeur / Analyste-programmeuse scientifique informatique
+905       M1868                                                                                                 Architecte de bases de données
+906       M1811                                                                                            Architecte de données informatiques
+911       M1806                                                     Architecte fonctionnel / Architecte fonctionnelle de système d'information
+912       M1850                                                                                                          Architecte multimédia
+916       M1839                                                                                               Architecte réseaux informatiques
+917       M1804                                                                                                 Architecte réseaux de télécoms
+919       M1839                                                                                               Architecte système d'information
+920       M1839                                                                                                Architecte système informatique
+921       M1839                                                                                              Architecte technique informatique
+967       M1808                                                                            Assembleur / Assembleuse photogrammètre cartographe
+996       M1814                                                                             Assistant / Assistante chef de projet informatique
+1060      M1810                                                                             Assistant / Assistante d'exploitation informatique
+1079      M1806                                                    Assistant fonctionnel / Assistante fonctionnelle des systèmes d'information
+1089      M1875                                                           Assistant / Assistante maîtrise d'ouvrage des systèmes d'information
+1197      M1863                                                                                  Auditeur / Auditrice en système d'information
+1198      M1863                                                                             Auditeur informaticien / Auditrice informaticienne
+1480      M1808                                                                                                                    Cartographe
+1481      M1808                                                                            Cartographe géomaticien / Cartographe géomaticienne
+1589      M1884                                                                          Chargé / Chargée de mise en exploitation informatique
+1605      M1804                                                                          Chargé / Chargée de planification réseaux de télécoms
+1665      M1808                                                            Chargé / Chargée d'études Systèmes d'Information Géographique (SIG)
+1705      M1804                                                                               Chargé / Chargée d'opération réseaux de télécoms
+1837      M1808                                                                                           Chef / Cheffe de batterie géographie
+1897      M1867                                                                                        Responsable de département informatique
+1903      M1885                                                                                            Responsable de département télécoms
+1906      M1867                                                                                           Responsable de division informatique
+1907      M1885                                                                                               Responsable de division télécoms
+1936      M1827                                                                                 Chef / Cheffe de groupe logicien informaticien
+2004      M1853                                                                                 Chef / Cheffe de projet développement logiciel
+2006      M1808                                                                                          Chef / Cheffe de projet en géomatique
+2007      M1853                                                                           Chef / Cheffe de projet en linguistique informatique
+2009      M1853                                                                    Chef / Cheffe de projet étude et développement informatique
+2012      M1853                                                                                           Chef / Cheffe de projet informatique
+2014      M1886                                                                                               Chef / Cheffe de projet internet
+2016      M1859                                                                          Chef / Cheffe de projet maîtrise d'œuvre informatique
+2017      M1881                                                          Chef / Cheffe de projet maîtrise d'ouvrage des systèmes d'information
+2018      M1881                                                    Chef / Cheffe de projet Maîtrise d'Ouvrage des Systèmes d'Information (MOA)
+2019      M1886                                                                                             Chef / Cheffe de projet multimédia
+2022      M1804                                                                                               Chef / Cheffe de projet télécoms
+2024      M1886                                                                                                    Chef / Cheffe de projet Web
+2025      M1828                                                                Chef / Cheffe de projet utilisateurs des systèmes d'information
+2193      M1810                                                                              Chef / Cheffe d'équipe de production informatique
+2255      M1890                                                                       Chef / Cheffe d'équipe station de sondage météorologique
+2285      M1884                                                                                      Chef / Cheffe d'exploitation informatique
+2328      M1808                                                                                       Chef / Cheffe exploitation images drones
+2329      M1808                                                                                                        Chef / Cheffe géographe
+2574      M1861                                                                            Concepteur / Conceptrice d'application informatique
+2588      M1836                                                                                          Concepteur / Conceptrice informatique
+2589      M1861                                                                                 Concepteur / Conceptrice logiciel informatique
+2596      M1804                                                           Concepteur réalisateur / Conceptrice réalisatrice de réseau télécoms
+2600      M1808                                        Concepteur-analyste / Conceptrice-analyste en systèmes d'information géographique -SIG-
+3177      M1808                                                                                         Conseiller / Conseillère en géomatique
+3290      M1838                                                                              Consultant / Consultante en système d'information
+3292      M1806                                                                    Consultant / Consultante ERP - Enterprise Resource Planning
+3294      M1806                                                                Consultant fonctionnel / Consultante fonctionnelle de progiciel
+3295      M1806                                                  Consultant fonctionnel / Consultante fonctionnelle des systèmes d'information
+3296      M1802                                                                                          Consultant / Consultante informatique
+3303      M1802                                                                                 Consultant / Consultante réseaux informatiques
+3304      M1804                                                                                              Consultant / Consultante télécoms
+3364      M1816                                                                                Contrôleur / Contrôleuse de réseau informatique
+3426      M1828                                               Coordinateur / Coordinatrice de la Maîtrise d'ouvrage des systèmes d'information
+3440      M1881                                                                Coordinateur / Coordinatrice projet en Maîtrise d'Ouvrage (MOA)
+3759      M1808                                                                                         Dessinateur / Dessinatrice cartographe
+3882      M1807                   Technicien détecteur / Technicienne détectrice spécialiste des opérations des forces navales et sous-marines
+3883      M1807  Technicien détecteur / Technicienne détectrice anti-sous-marins spécialiste des opérations des forces navales et sous-marines
+3890      M1861                                                                                       Développeur / Développeuse d'application
+3895      M1805                                                                                        Développeur / Développeuse informatique
+3897      M1837                                                                                          Développeur / Développeuse multimédia
+3898      M1855                                                                                                 Développeur / Développeuse web
+3908      M1842                                                                                       Didacticien / Didacticienne informatique
+3991      M1867                                                                             Directeur / Directrice de département informatique
+3992      M1885                                                                                 Directeur / Directrice de département télécoms
+4024      M1803                                                  Directeur / Directrice de l'Organisation et des Systèmes d'Information (DOSI)
+4049      M1870                                                                               Directeur / Directrice de projet en informatique
+4050      M1885                                                                                      Directeur / Directrice de projet télécoms
+4066      M1885                                                                                     Directeur / Directrice de service télécoms
+4119      M1803                                                                        Directeur / Directrice des systèmes d'information -DSI-
+4124      M1803                                                                              Directeur / Directrice des systèmes d'information
+4125      M1803                                                                  Directeur / Directrice des systèmes d'information et télécoms
+4192      M1867                                                                                            Directeur / Directrice informatique
+4222      M1885                                                                                                Directeur / Directrice télécoms
+4671      M1847                                                                                   Expert / Experte en communication et réseaux
+4675      M1856                                                                       Expert / Experte en sécurité des systèmes d'exploitation
+4676      M1850                                                                         Expert / Experte en technologie Internet et multimédia
+4682      M1820                                                                            Expert / Experte méthodes et outils en informatique
+4683      M1820                                                                              Expert / Experte méthodes et qualité informatique
+4684      M1806                                                                                  Expert / Experte métier système d'information
+4688      M1820                                                                                          Expert / Experte qualité informatique
+4689      M1802                                                                                           Expert / Experte réseaux et télécoms
+4691      M1856                                                                                         Expert / Experte sécurité informatique
+4692      M1820                                                                     Expert / Experte sécurité, méthode et qualité informatique
+4694      M1802                                                                                        Expert / Experte système d'exploitation
+4695      M1802                                                                                            Expert / Experte système et réseaux
+4736      M1807                                                             Exploitant / Exploitante des supports hertziens radio satellitaire
+4737      M1807                                                                   Exploitant / Exploitante des systèmes de guerre électronique
+4738      M1807                                                                                Exploitant / Exploitante des télécommunications
+4741      M1807                                                                                   Exploitant / Exploitante faisceaux hertziens
+4743      M1810                                                                                          Exploitant / Exploitante informatique
+4746      M1807                                                  Exploitant / Exploitante système d'information et de communication aux armées
+4747      M1807                                                                         Exploitant / Exploitante système composante projetable
+4748      M1807                                                                                         Exploitant / Exploitante transmissions
+4976      M1808                                                                                Géographe-géomaticien / Géographe-géomaticienne
+4984      M1808                                                                                                    Géomaticien / Géomaticienne
+5043      M1871                                                                              Gestionnaire d'applications système d'information
+5066      M1884                                                                                        Gestionnaire de production informatique
+5071      M1884                                                                                       Gestionnaire de ressources informatiques
+5072      M1869                                                                           Gestionnaire de ressources matérielles informatiques
+5083      M1810                                                                                              Gestionnaire du parc informatique
+5095      M1808                                                                         Gestionnaire Systèmes d'Information Géographique -SIG-
+5156      M1807                                                                                              Guetteur / Guetteuse de la flotte
+5225      M1808                                                                                                                    Hydrographe
+5284      M1834                                                                                                       Infographiste web master
+5285      M1852                                                                                       Informaticien / Informaticienne analyste
+5287      M1818                                                                         Informaticien chargé / Informaticienne chargée d'étude
+5288      M1861                                                                                  Informaticien / Informaticienne d'application
+5289      M1805                                                                               Informaticien / Informaticienne de développement
+5300      M1818                                                                       Ingénieur / Ingénieure analyste en système d'information
+5301      M1841                                                                                   Ingénieur / Ingénieure analyste informatique
+5302      M1836                                                              Ingénieur analyste-programmeur / Ingénieure analyste-programmeuse
+5335      M1836                                                                     Ingénieur concepteur / Ingénieure conceptrice informatique
+5343      M1841                                                Ingénieur / Ingénieure d'analyse et de programmation en informatique de gestion
+5346      M1841                                                                              Ingénieur / Ingénieure d'application informatique
+5350      M1836                                                                              Ingénieur / Ingénieure de conception informatique
+5353      M1827                                                                           Ingénieur / Ingénieure de développement informatique
+5377      M1884                                                                              Ingénieur / Ingénieure de production informatique
+5382      M1841                                                                             Ingénieur / Ingénieure de réalisation informatique
+5398      M1804                                                                                    Ingénieur / Ingénieure déploiement télécoms
+5404      M1891                                                                          Ingénieur / Ingénieure des travaux de la météorologie
+5413      M1818                                                     Ingénieur / Ingénieure d'étude en applications scientifiques informatiques
+5414      M1818                                                                      Ingénieur / Ingénieure d'étude en informatique de gestion
+5415      M1818                                                                   Ingénieur / Ingénieure d'étude et développement informatique
+5416      M1818                                                                                    Ingénieur / Ingénieure d'étude informatique
+5417      M1818                                                                           Ingénieur / Ingénieure d'étude logiciel informatique
+5431      M1827                                                                     Ingénieur / Ingénieure développement logiciel informatique
+5436      M1884                                                                             Ingénieur / Ingénieure d'exploitation informatique
+5438      M1813                                                                               Ingénieur / Ingénieure d'intégration applicative
+5456      M1804                                                                                Ingénieur / Ingénieure en architecture télécoms
+5468      M1827                                                                         Ingénieur / Ingénieure en développement d'applications
+5511      M1804                                                                              Ingénieur / Ingénieure études et support télécoms
+5531      M1808                                                                                             Ingénieur / Ingénieure hydrographe
+5534      M1841                                                                           Ingénieur informaticien / Ingénieure informaticienne
+5535      M1827                                                                Ingénieur / Ingénieure informatique développement en temps réel
+5537      M1818                                                                                   Ingénieur / Ingénieure logiciel informatique
+5550      M1822                                                                                  Ingénieur / Ingénieure méthodes informatiques
+5578      M1827                                                                                  Ingénieur / Ingénieure programme informatique
+5583      M1804                                                                                                   Ingénieur / Ingénieure radio
+5584      M1822                                                                                     Ingénieur / Ingénieure réseau informatique
+5585      M1804                                                                                        Ingénieur / Ingénieure réseaux télécoms
+5596      M1819                                                                                   Ingénieur / Ingénieure sécurité informatique
+5604      M1822                                                                                    Ingénieur / Ingénieure système informatique
+5605      M1822                                                                             Ingénieur / Ingénieure système réseau informatique
+5606      M1808                                                                Ingénieur / Ingénieure Systèmes d'Information Géographique -SIG
+5614      M1804                                                                                       Ingénieur / Ingénieure télécommunication
+5615      M1804                                                                                                Ingénieur / Ingénieure télécoms
+5621      M1804                                                                          Ingénieur / Ingénieure validation réseaux de télécoms
+5735      M1813                                                                          Intégrateur / Intégratrice d'application informatique
+5736      M1810                                                                         Intégrateur / Intégratrice d'exploitation informatique
+5746      M1807                                                                                Intercepteur / Interceptrice graphie aux armées
+5747      M1807                                                                              Intercepteur / Interceptrice technique aux armées
+5748      M1807                                                      Intercepteur traducteur / Interceptrice traductrice de langues aux armées
+5749      M1808                                                                        Interprétateur / Interprétatrice d'images géographiques
+5750      M1808                                                                      Interprétateur / Interprétatrice d'images photographiques
+5900      M1807                                                                                                  Linguiste d'écoute aux armées
+6019      M1875                                                 Coordinateur / Coordinatrice Maitrise d'Ouvrage Système d'Information (MOA SI)
+6112      M1804                                                                                     Marketeur / Marketeuse réseaux de télécoms
+6343      M1809                                                                                                                 Météorologiste
+6344      M1809                                                                                                    Météorologiste océanographe
+6345      M1809                                                                                                  Météorologiste prévisionniste
+6346      M1809                                                                                                                   Météorologue
+6674      M1804                                                                                                                Network planner
+6692      M1893                                                                                               Observateur / Observatrice météo
+6693      M1893                                                                                 Observateur / Observatrice nivo-météorologiste
+6702      M1808                                                                                               Officier / Officière cartographe
+6717      M1808                                                                                                 Officier / Officière géographe
+6721      M1808                                                                            Officier marinier / Officière marinière hydrographe
+6874      M1807                                                                                                  Opérateur / Opératrice écoute
+6912      M1808                                                                                               Opérateur / Opératrice géographe
+6917      M1810                                                                                            Opérateur / Opératrice informatique
+6922      M1807                                                             Opérateur navigateur / Opératrice navigatrice terrestre aux armées
+6939      M1810                                                                       Opérateur pupitreur / Opératrice pupitreuse informatique
+6941      M1807                                                                                                   Opérateur / Opératrice radio
+6942      M1807                                                                                          Opérateur / Opératrice radiographiste
+6952      M1893                                                                                  Opérateur / Opératrice sondage météorologique
+7014      M1807                                                                             Opérateur / Opératrice système qualifié aux armées
+7230      M1813                                                                                        Paramétreur / Paramétreuse logiciel ERP
+7421      M1884                                                                                             Pilote de ressources informatiques
+7447      M1884                                                                                               Pilote multiserveur informatique
+7479      M1804                                                                             Planificateur / Planificatrice réseaux de télécoms
+7725      M1809                                                                                                            Prévisionniste crue
+7726      M1891                                                                                         Prévisionniste météorologue des armées
+7845      M1861                                                                                      Programmeur / Programmeuse d'applications
+7846      M1805                                                                         Programmeur / Programmeuse de maintenance informatique
+7847      M1805                                                                                            Programmeur / Programmeuse d'études
+7849      M1805                                                                             Programmeur industriel / Programmeuse industrielle
+7850      M1805                                                                                        Programmeur / Programmeuse informatique
+7851      M1805                                                                       Programmeur / Programmeuse logiciel de base informatique
+7852      M1804                                                                                 Programmeur / Programmeuse réseaux de télécoms
+7904      M1810                                                                             Pupitreur / Pupitreuse d'exploitation informatique
+7908      M1810                                                                                     Pupitreur / Pupitreuse réseau informatique
+7913      M1842                                                                           Qualiticien / Qualiticienne logiciel en informatique
+7926      M1807                                                                                                             Radiotélégraphiste
+8236      M1890                                                                                             Responsable cellule météorologique
+8273      M1861                                                                                         Responsable d'application informatique
+8285      M1842                                                                                        Responsable d'atelier de génie logiciel
+8354      M1867                                                                                         Responsable de domaine en informatique
+8355      M1885                                                                                                Responsable de domaine télécoms
+8367      M1801                                                                                        Responsable de gestion de configuration
+8393      M1878                                                                                      Responsable de la production informatique
+8463      M1885                                                                                  Responsable de programmes réseaux de télécoms
+8464      M1870                                                              Responsable de projet architecture et intégration grands systèmes
+8465      M1870                                                                                Responsable de projet architecture informatique
+8466      M1885                                                                                    Responsable de projet architecture télécoms
+8473      M1827                                                                                             Responsable de projet informatique
+8476      M1828                                                                       Responsable de projets « métiers » système d'information
+8485      M1885                                                                                                Responsable de réseaux télécoms
+8566      M1827                                                                                   Responsable des développements informatiques
+8586      M1803                                                                                         Responsable des systèmes d'information
+8587      M1826                                                                                         Responsable des systèmes informatiques
+8599      M1818                                                                                               Responsable d'étude informatique
+8626      M1878                                                                                        Responsable d'exploitation informatique
+8648      M1803                                                                                            Responsable du management de la DSI
+8655      M1867                                                                                             Responsable du réseau informatique
+8671      M1867                                                                                          Responsable d'un service informatique
+8672      M1885                                                                                              Responsable d'un service télécoms
+8735      M1867                                                                                    Responsable des systèmes d'information (SI)
+8768      M1867                                                                                                 Responsable micro-informatique
+8784      M1803                                                                                            Responsable production informatique
+8805      M1812                                                                                Responsable sécurité des systèmes d'information
+8807      M1812                                                                                              Responsable sécurité informatique
+8822      M1808                                                                           Responsable Système d'Information Géographique -SIG-
+8830      M1885                                                                                                           Responsable télécoms
+8834      M1875                                                                            Responsable utilisateurs des systèmes d'information
+9110      M1891                                                                                    Sous-officier / Sous-officière météorologue
+9125      M1808                                                                                      Spécialiste de l'information géographique
+9126      M1809                                                                                    Spécialiste de l'information météorologique
+9131      M1808                                                                                          Spécialiste en géodésie et satellites
+9133      M1809                                                                                   Spécialiste METOC Météorologie Océanographie
+9135      M1807                                                  Technicien / Technicienne des systèmes d'information et de télécommunications
+9317      M1807                                                                             Technicien / Technicienne communication aux armées
+9398      M1893                                                                                   Technicien / Technicienne de la météorologie
+9570      M1816                                                        Technicien / Technicienne d'essais et de contrôle en télécommunications
+9572      M1807                                                  Technicien / Technicienne détection et analyse des signaux électromagnétiques
+9585      M1893                                                                    Technicien / Technicienne d'exploitation de la météorologie
+9594      M1810                                                                          Technicien / Technicienne d'exploitation informatique
+9596      M1807                                                                     Technicien / Technicienne d'exploitation télécommunication
+9653      M1807                                                                                     Technicien / Technicienne en communication
+9733      M1816                                                                                Technicien / Technicienne en télécommunications
+9734      M1816                                                        Technicien / Technicienne en télécommunications et réseaux d'entreprise
+9745      M1816             Technicien expert / Technicienne experte en installation intégration en télécommunications et réseaux d'entreprise
+9747      M1807                                            Technicien exploitant / Technicienne exploitante de systèmes de guerre électronique
+9749      M1807                                                                    Technicien / Technicienne exploitation systèmes acoustiques
+9764      M1808                                                                            Technicien géomaticien / Technicienne géomaticienne
+9773      M1810                                                                                         Technicien / Technicienne informatique
+9774      M1804                                                                       Technicien / Technicienne ingénierie réseaux de télécoms
+9777      M1816                               Technicien / Technicienne installation intégration en télécommunications et réseaux d'entreprise
+9796      M1893                                                                          Technicien / Technicienne météorologiste-océanographe
+9830      M1805                                                                                        Technicien / Technicienne programmation
+9843      M1807                                                         Technicien / Technicienne réseau de transmission de données aux armées
+9844      M1816                                                                                  Technicien / Technicienne réseau informatique
+9845      M1816                                                           Technicien / Technicienne réseaux et télécommunications d'entreprise
+9848      M1808                                                              Technicien restituteur / Technicienne restitutrice photogrammètre
+9851      M1807                                                               Technicien / Technicienne sécurité des communications aux armées
+9862      M1816  Technicien spécialisé / Technicienne spécialisée en installation et intégration en télécommunications et réseaux d'entreprise
+9863      M1816                                 Technicien spécialisé / Technicienne spécialisée en télécommunications et réseaux d'entreprise
+9866      M1807                                  Technicien supérieur / Technicienne supérieure détection électromagnétique sol-air aux armées
+9880      M1810                                                                                 Technicien / Technicienne système informatique
+9881      M1808                                                            Technicien / Technicienne Systèmes d'Information Géographique -SIG-
+9914      M1863                                                                                                Testeur / Testeuse informatique
+10021     M1807                                                                                                        Transfiliste aux armées
+10023     M1807                                                                                        Transmetteur / Transmettrice aux armées
+10091     M1838                                                                                           Urbaniste des systèmes d'information
+10321     M1834                                                                       Webmaster concepteur / Webmaster conceptrice de site web
+10322     M1855                                                                                 Webmaster développeur / Webmaster développeuse
+10323     M1834                                                                                                        Webmaster éditorialiste
+10326     M1834                                                                          Webmaster chargé / Webmaster chargée de communication
+10361     M1858                                                                   Chef / Cheffe de projet TMA - Tierce Maintenance Applicative
+10362     M1832                                                                                          Homologateur / Homologatrice logiciel
+10386     M1804                                                              Négociateur / Négociatrice de sites télécoms en téléphonie mobile
+10387     M1804                                                                  Négociateur / Négociatrice de sites télécoms en fibre optique
+10389     M1851                                                                                   Analyste décisionnel - Business Intelligence
+10699     M1807                                                              Opérateur / Opératrice de surveillance de la circulation maritime
+10700     M1807                                                            Opérateur / Opératrice des systèmes de combat en opérations navales
+10753     M1824                                                                 Développeur / Développeuse décisionnel - Business Intelligence
+10754     M1872                                                                   Consultant / Consultante décisionnel - Business Intelligence
+10775     M1831                                                                              Lead programmeur / Lead programmeuse - jeux vidéo
+10776     M1831                                                                                        Programmeur / Programmeuse - jeux vidéo
+10777     M1831                                                                                        Développeur / Développeuse - jeux vidéo
+10778     M1806                                                                              Consultant / Consultante SIRH ressources humaines
+10779     M1806                                                                               Consultant / Consultante SI finance comptabilité
+10780     M1806                                                                      Consultant / Consultante SI Gestion de la Relation Client
+10798     M1855                                                                                          Développeur / Développeuse web mobile
+10799     M1806                                                                            Consultant / Consultante en accessibilité numérique
+10845     M1860                                                                                                               Architecte cloud
+10846     M1834                                                                                                        Responsable qualité web
+10847     M1833                                                                                            Ingénieur / Ingénieure sécurité web
+10848     M1856                                                                                              Expert / Experte en cybersécurité
+10849     M1806                                                                          Consultant / Consultante SaaS - Software as a Service
+10888     M1863                                                                                     Analyste en vulnérabilité de code logiciel
+10889     M1819                                                                              Architecte de sécurité des systèmes d'information
+10890     M1863                                                                    Auditeur / Auditrice en sécurité des systèmes d'information
+10891     M1856                                                                        Expert / Experte en sécurité des systèmes d'information
+10892     M1866                                                    Expert / Experte en tests d'intrusion - sécurité des systèmes d'information
+10893     M1863                                                          Post auditeur / Post auditrice en sécurité des systèmes d'information
+10894     M1844                                                                                                      Analyste en cybersécurité
+10895     M1805                                                              Développeur / Développeuse de sécurité des systèmes d'information
+10896     M1844                                                                                        Opérateur / Opératrice en cybersécurité
+10897     M1856                                                                                          Spécialiste en gestion de crise cyber
+10915     M1834                                                                             Responsable éditorial / Responsable éditoriale web
+10924     M1811                                                                                                                   Data manager
+10925     M1855                                                                                          Développeur / Développeuse full-stack
+10926     M1811                                                                                            Développeur / Développeuse Big Data
+10927     M1806                                                                                                    Consultant / Consultante IT
+11045     M1861                                         Développeur / Développeuse de logiciel de simulation optique et réalité virtuelle (VR)
+11046     M1861                                                                       Développeur / Développeuse logiciel de réalité augmentée
+11069     M1814                                                                                                                   Scrum Master
+11070     M1864                                                                                                                  Product Owner
+11093     M1801                                          Administrateur / Administratrice système et réseaux d'information et de communication
+11094     M1801                                                                      Administrateur / Administratrice de plateforme de service
+11104     M1803                                                                                                  Chief Technical Officer - CTO
+11105     M1828                                                                                                                Project Manager
+11106     M1855                                                                                           Développeur / Développeuse front-end
+11107     M1855                                                                                            Développeur / Développeuse back-end
+11108     M1828                                                                                               Project Management Officer - PMO
+11257     M1806                                                                                                               Business analyst
+11298     M1811                                                                                                   Analyste qualité des données
+11299     M1811                                                                                                            Architecte big data
+11300     M1811                                                                                                              Big data engineer
+11301     M1811                                                                                                                  Data engineer
+11302     M1811                                                                                                               Docteur big data
+11303     M1811                                                                                                      Expert / Experte big data
+11304     M1811                                                                                            Expert / Experte technique big data
+11305     M1811                                                                                                Ingénieur / Ingénieure big data
+11306     M1811                                                                                                 Ingénieur / Ingénieure dataviz
+11307     M1811                                                                                                 Ingénieur / Ingénieure données
+11308     M1811                                                                               Ingénieur / Ingénieure en développement big data
+11309     M1811                                                                                       Responsable architecture conception data
+11310     M1811                                                                                                           Responsable big data
+11311     M1811                                                                                                Développeur / Développeuse data
+11312     M1811                                                                                              Analyste scientifique des données
+11313     M1812                                                                                      Chief Information Security Officer (CISO)
+11314     M1812                                                                                                        Data Protection Officer
+11315     M1812                                                                             Directeur / Directrice de la sécurité informatique
+11316     M1812                                                                                      Directeur / Directrice de la sécurité tic
+11317     M1812                                                                  Manager de la Sécurité et des Risques de l'Information (MSRI)
+11318     M1812                                                                                          Responsable Sécurité de l'information
+11319     M1812                                                                   Responsable de la Sécurité des Systèmes d'Information (RSSI)
+11320     M1812                                                                                        Responsable de la sécurité informatique
+11321     M1812                                                      Responsable des risques de la sécurité des systèmes informatiques (RRSSI)
+11322     M1812                                              Responsable ou directeur de la sécurité des systèmes d'information (RSSI ou DSSI)
+11323     M1812                                                                              Responsable risque sécurité réseaux informatiques
+11324     M1812                                                                                 Responsable sécurité des réseaux informatiques
+11325     M1813                                                                                                                 ERP Consultant
+11326     M1813                                                                                                                 ERP integrator
+11327     M1813                                                                                                   Consultant / Consultante ERP
+11328     M1813                                                                                               Consultant / Consultante produit
+11329     M1813                                                                                             Ingénieur / Ingénieure intégration
+11330     M1813                                                                                               Ingénieur / Ingénieure progiciel
+11331     M1813                                                                                   Intégrateur / Intégratrice logiciels métiers
+11332     M1813                                                                                        Paramétreur / Paramétreuse de logiciels
+11413     M1807                                                                                      Opérateur / Opératrice télécom aux armées
+11544     M1816                                                                                  Technicien / Technicienne télécoms et réseaux
+11611     M1814                                                                                                      Scrum master informatique
+11646     M1818                                                                                       Informaticien / Informaticienne d'études
+11647     M1818                                                                                          Chargé / Chargée d'étude informatique
+11648     M1818                                                                                                Ingénieur / Ingénieure logiciel
+11672     M1815                                                                         Spécialiste test et validation logiciel ou application
+11673     M1863                                                                                                         Recetteur / Recetteuse
+11678     M1816                                                                                    Technicien / Technicienne réseau Datacenter
+11681     M1830                                                                  Administrateur / Administratrice réseau de télécommunications
+11684     M1821                                                                                            Analyste d'application informatique
+11691     M1828                                                                 Chef de projet / Cheffe de projet (Project Management Officer)
+11696     M1823                                                                                           Consultant / Consultante avant-vente
+11697     M1823                                                                               Ingénieur / Ingénieure technico-commercial(e) IT
+11698     M1823                                                                                Ingénieur / Ingénieure informatique avant-vente
+11699     M1825                                                                                 Coordinateur / Coordinatrice de production web
+11706     M1827                                                                                                  Ingénieur / Ingénieure DevOps
+11707     M1827                                                                                  Ingénieur / Ingénieure développement logiciel
+11708     M1827                                                                                                                         Devops
+11709     M1826                                                                               Ingénieur / Ingénieure supervision IT Datacenter
+11710     M1829                                                           Ingénieur / Ingénieure systèmes et réseaux des territoires connectés
+11711     M1822                                                                           Ingénieur / Ingénieure systèmes & réseaux Datacenter
+11712     M1822                                                                       Ingénieur / Ingénieure systèmes et réseaux informatiques
+11713     M1822                                                          Ingénieur / Ingénieure des systèmes d'information et de communication
+11714     M1822                                                                                  Ingénieur / Ingénieure intégration de système
+11743     M1835                                                                       Architecte systèmes et réseaux des territoires connectés
+11744     M1839                                                                                                 Architecte systèmes et réseaux
+11757     M1840                                                                    Directeur / Directrice de projets des territoires connectés
+11758     M1802                                                                             Expert / Experte systèmes et réseaux informatiques
+11759     M1802                                                                                                                Analyste réseau
+11760     M1802                                                                                                          Analyste informatique
+11761     M1802                                                                                           Expert / Experte réseau informatique
+11763     M1832                                                                           Homologateur / Homologatrice fonctionnel de logiciel
+11767     M1836                                                                                            Chercheur / Concepteur informatique
+11768     M1836                                                        Ingénieur / Ingénieure recherche et développement (R&D) en informatique
+11769     M1841                                                                                   Expert / Experte en application informatique
+11770     M1841                                                                                            Ingénieur / Ingénieure informatique
+11771     M1841                                                                            Ingénieur-conseil / Ingénieure-conseil informatique
+11811     M1857                                                                                                           Urbaniste Datacenter
+11812     M1849                                                                                 Administrateur / Administratrice de messagerie
+11813     M1801                                                                Administrateur / Administratrice de systèmes d'information (SI)
+11814     M1801                                                                                  Administrateur / Administratrice informatique
+11815     M1801                                                                           Administrateur / Administratrice systèmes et réseaux
+11816     M1801                                                                      Administrateur / Administratrice de système d'information
+11817     M1894                                                                                                         Database administrator
+11821     M1845                                                                                           Architecte IoT - Internet des Objets
+11822     M1850                                                                                             Architecte multimédias interactifs
+11842     M1805                                                                                                Informaticien / Informaticienne
+11846     M1847                                                   Expert / Experte en technologie de l'information et des communications (TIC)
+11847     M1856                                                                                Expert / Experte en sécurité informatique (SSI)
+11848     M1856                                                                  Expert / Experte en sécurité des systèmes d'information (SSI)
+11849     M1846                                                                                Ingénieur / Ingénieure Cybersécurité Datacenter
+11887     M1830                                                             Administrateur / Administratrice réseaux des territoires connectés
+11913     M1861                                                                           Développeur / Développeuse logiciel ou d'application
+11916     M1863                                                       Evaluateur / Evaluatrice sécurité des systèmes et produits informatiques
+11917     M1866                                                                                                       Pentesteur / Pentesteuse
+11918     M1863                                                                 Auditeur / Auditrice Sécurité des systèmes d'information (SSI)
+11929     M1862                                                                                       Responsable d'exploitation fibre optique
+11937     M1816                                                                                Technicien / Technicienne réseau et maintenance
+11940     M1816                                                                    Technicien / Technicienne réseaux informatiques et télécoms
+11941     M1826                                                                                    Ingénieur / Ingénieure support informatique
+11942     M1826                                                                                         Ingénieur / Ingénieure support réseaux
+11945     M1835                                                                Architecte des systèmes d'information des territoires connectés
+11946     M1835                                                                                       Architecte SOA des territoires connectés
+11981     M1840                                                                     Directeur / Directrice de programme de territoire connecté
+12011     M1844                                                                                                          Analyste de la menace
+12012     M1856                                                                                                   Expert / Experte sécurité IT
+12136     M1803                                                   Directeur / Directrice des systèmes d'information (DSI, 50 salariés ou plus)
+12137     M1803                                                         Directeur / Directrice technique en informatique (50 salariés ou plus)
+12138     M1803                                                                               Directeur / Directrice technique en informatique
+12139     M1803                                                                               Directeur / Directrice de l'innovation numérique
+12147     M1808                                                                                                             Cartographe du BTP
+12197     M1865                                                                                             Chef / Cheffe de projet blockchain
+12209     M1867                                                                           Chef / Cheffe de service de maintenance informatique
+12210     M1867                                                           Directeur / Directrice de service informatique (50 salariés ou plus)
+12211     M1867                                                                                 Directeur / Directrice de service informatique
+12212     M1867                                                                                Directeur / Directrice de division informatique
+12213     M1867                                                                                          Chef / Cheffe de service informatique
+12214     M1867                                                                                              Responsable analyse programmation
+12215     M1867                                                                                           Responsable maintenance informatique
+12216     M1868                                                                                                                 Data architect
+12217     M1868                                                                                                   Spécialiste bases de données
+12218     M1868                                                                                   Concepteur / Conceptrice de bases de données
+12219     M1868                                                                                                     Architecte base de données
+12265     M1869                                                                                              Gestionnaire de parc informatique
+12266     M1869                                                                                        Gestionnaire de parc micro-informatique
+12281     M1870                                                                Directeur / Directrice de laboratoire de recherche informatique
+12293     M1872                                                     Consultant décisionnel / Consultante décisionnelle - Business Intelligence
+12368     M1873                                                                                                       Spécialiste IA embarquée
+12369     M1873                                                                                            Ingénieur / Ingénieure IA embarquée
+12393     M1874                                                                                             Superviseur / Superviseuse Hotline
+12394     M1874                                                                                                            Spécialiste support
+12416     M1875                                                                        Coordonnateur / Coordonnatrice du système d'information
+12417     M1876                                                                                                Technicien / Technicienne Cloud
+12425     M1877                                                                                          Développeur / Développeuse blockchain
+12460     M1878                                                                               Directeur / Directrice des risques informatiques
+12464     M1879                                                                                         Ingénieur / Ingénieure Cloud computing
+12483     M1880                                                                                                            Spécialiste e-santé
+12484     M1880                                                                                               Consultant / Consultante e-santé
+12485     M1880                                                                                                Chef / Cheffe de projet e-santé
+12486     M1880                                                                                                 Ingénieur / Ingénieure e-santé
+12530     M1882                                                                                                             Security architect
+12531     M1882                                                                                                       Architecte cybersécurité
+12532     M1882                                                                                               Architecte sécurité informatique
+12544     M1883                                                                                      Analyste SOC (Security Operations Center)
+12550     M1884                                                              Ingénieur / Ingénieure systèmes, réseaux et sécurité informatique
+12551     M1884                                                                           Ingénieur / Ingénieure systèmes, réseaux et sécurité
+12553     M1885                                                                                             Responsable de programmes télécoms
+12554     M1885                                                                                                    Responsable service télécom
+12561     M1886                                                                                                        Digital project manager
+12562     M1886                                                                                                Chef / Cheffe de projet digital
+12563     M1886                                                                                      Chef / Cheffe de projet technique digital
+12564     M1887                                                                                                 Ingénieur / Ingénieure no code
+12565     M1887                                                                                                        Product builder no code
+12578     M1891                                                                                                           Prévisionniste météo
+12580     M1888                                                                                         Spécialiste en modélisation climatique
+12596     M1889                                                                                                  Développeur / Développeuse IA
+12597     M1889                                                                                    Développeur / Développeuse Machine Learning
+12598     M1889                                                                                  Expert / Experte en Intelligence Artificielle
+12599     M1889                                                                                        Ingénieur / Ingénieure machine learning
+12600     M1889                                                                       Ingénieur / Ingénieure en Intelligence Artificielle (IA)
+12601     M1889                                                                                                             IA Product Manager
+12602     M1889                                                                            Ingénieur / Ingénieure en apprentissage automatique
+12603     M1889                                                                                                                Prompt engineer
+12606     M1890                                                                             Responsable d'opérations en station météorologique
+12607     M1891                                                                                      Ingénieur / Ingénieure de la météorologie
+12608     M1891                                                                             Ingénieur / Ingénieure prévisionniste météorologue
+12610     M1892                                                                                                  Architecte systèmes embarqués
+12611     M1892                                                                               Ingénieur / Ingénieure en informatique embarquée
+12624     M1894                                                                                                Gestionnaire de base de données
+12625     M1894                                                           Administrateur général donnée / Administratrice générale données des
+12626     M1894                                                                                        Ingénieur / Ingénieure bases de données
+12627     M1894                                                                                               Responsable des bases de données
+12628     M1894                                                                               Responsable de la production de bases de données
+12629     M1894                                                                                      Technicien / Technicienne base de données
+12636     M1809                                                                                                              Hydrométéorologue
+12699     M1834                                                                                                                      Webmaster
+12702     M1818                                                                                                            Architecte logiciel
+12773     M1803                                                                                                      Chief information officer
+12780     M1801                                                                              Administrateur / Administratrice d'infrastructure
+12781     M1801                                                                                           Gestionnaire de système informatique
+12783     M1839                                                                                  Consultant / Consultante architecte technique
+12784     M1827                                                                                                              Architecte DevOps
+12785     M1802                                                                                                Expert / Experte virtualisation
+12786     M1802                                                                                                    Expert / Experte sharepoint
+12787     M1818                                                                                                      Expert / Experte logiciel
+12789     M1803                                                                                             Chief information security officer
+12791     M1814                                                                                                  Chef / Cheffe de projet agile
+12792     M1803                                                                                 Chef / Cheffe de projet Systèmes d'Information
+12793     M1827                                                                                                             Spécialiste DevOps
+12794     M1813                                                                                                    Chef / Cheffe de projet erp
+12795     M1809                                                                                            Analyste de données météorologiques
+12796     M1809                                                                        Expert / Experte en gestion des risques météorologiques
+12797     M1844                                                                                     Technicien / Technicienne en cybersécurité
+12800     M1809                                                                                                    Météorologiste aéronautique
+12808     M1853                                                                                                Chargé / Chargée de projet Data
+12812     M1825                                                                                 Coordinateur / Coordinatrice de projet digital
+12813     M1831                                                                                            Développeur / Développeuse gameplay
+12814     M1805                                                                                                 Développeur / Développeuse IOT
+12815     M1855                                                                                             Développeur / Développeuse no code
+12816     M1805                                                                                  Développeur / Développeuse systèmes embarqués
+12817     M1825                                                                                     Directeur / Directrice de projets digitaux
+12818     M1818                                                                                   Ingénieur / Ingénieure logiciel en robotique
+12820     M1838                                                                                      Expert / Experte en système d'information
+12822     M1811                                                                                      Ingénieur / Ingénieure Data Visualisation
+12823     M1855                                                                                                 Intégrateur / Intégratrice web
+12826     M1831                                                                                            Programmeur / Programmeuse gameplay
+12833     M1865                                                                                              Ingénieur / Ingénieure blockchain
+12857     M1891                                                                          Ingénieur / Ingénieure prévisionniste en météorologie

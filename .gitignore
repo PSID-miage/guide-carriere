@@ -1,3 +1,6 @@
 .venv/
 __pycache__/
 *.pyc
+.env
+data/offres_ft_m18.csv
+data/cv_annotes_brut.csv

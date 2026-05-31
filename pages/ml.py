@@ -2,10 +2,26 @@ import os
 import sys
 import argparse
 import traceback
-# Permet d'importer data/* quand on lance ce fichier directement (python pages/ml.py)
-_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+import warnings
+from sklearn.exceptions import EfficiencyWarning
+
+# Ignorer explicitement les UserWarning spécifiques de scikit-learn
+warnings.filterwarnings("ignore", category=UserWarning, module="sklearn")
+
+# ==============================================================================
+# GESTION DES CHEMINS ABSOLUS (Évite les erreurs de dossier courant / vide)
+# ==============================================================================
+# Calcule dynamiquement la racine du projet 'guide-carriere' peu importe l'appel CLI
+_CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+if os.path.basename(_CURRENT_DIR) == "pages":
+    _ROOT = os.path.dirname(_CURRENT_DIR)  # Remonte d'un cran si on est dans /pages
+else:
+    _ROOT = _CURRENT_DIR
+
 if _ROOT not in sys.path:
     sys.path.insert(0, _ROOT)
+    
 import base64
 import io
 import time
@@ -42,7 +58,12 @@ except Exception:
 
 class ROMEAIEngine:
     def __init__(self, data_path="data/"):
-        self.data_path = data_path
+        # Version ultra-robuste : on colle la racine du projet avec le dossier data
+        # Plus besoin de vérifier si c'est absolu ou non, ça marche à tous les coups !
+        self.data_path = os.path.join(_ROOT, "data")
+
+        print(f"📂 [MOTEUR ML] Chemin absolu de DATA utilisé : {self.data_path}")
+        
         self.df_trained = self._build_knowledge_base()
 
         if self.df_trained.empty:
@@ -69,6 +90,7 @@ class ROMEAIEngine:
             def safe_read(name):
                 path = os.path.join(self.data_path, name)
                 if not os.path.exists(path):
+                    print(f"❌ Fichier introuvable : {path}")
                     return pd.DataFrame()
                 return pd.read_csv(path, sep=None, engine='python',
                                    encoding='utf-8', on_bad_lines='skip')
@@ -133,21 +155,36 @@ class ROMEAIEngine:
             print(f"❌ Erreur build_knowledge_base : {e}")
             return pd.DataFrame()
 
-    def predict(self, user_input, top_n=3):
+    def predict(self, user_input, top_n=3, threshold_score=10.0):
         if not user_input or len(user_input) < 30:
             return "SIGNAL_INSUFFISANT"
+        
         user_vec = self.vectorizer.transform([user_input.lower()])
+        
+        # Si le vecteur est complètement vide (aucun mot du CV n'est connu dans le dictionnaire M18)
+        if user_vec.nnz == 0:
+            return "HORS_PERIMETRE"
+        
         distances, indices = self.knn_model.kneighbors(user_vec, n_neighbors=top_n)
 
         results = []
         for i, idx in enumerate(indices[0]):
             row = self.df_trained.iloc[idx]
-            results.append({
-                'metier': row['libelle_rome'],
-                'code': row['code_rome'],
-                'source': row['source'],
-                'score': round((1 - distances[0][i]) * 100, 1)
-            })
+            score = round((1 - distances[0][i]) * 100, 1)
+            
+            # FILTRE INDIVIDUEL : On ne garde que les métiers qui dépassent le seuil
+            if score >= threshold_score:
+                results.append({
+                    'metier': row['libelle_rome'],
+                    'code': row['code_rome'],
+                    'source': row['source'],
+                    'score': round((1 - distances[0][i]) * 100, 1)
+                })
+            
+       # Si aucun métier ne dépasse le seuil, le profil est hors-périmètre
+        if not results:
+            return "HORS_PERIMETRE"
+        
         return results
 
     # ----------------------------------------------------------
@@ -214,7 +251,7 @@ class ROMEAIEngine:
         plt.ylabel("Vrai groupe (annotation manuelle)")
         plt.xlabel("Groupe prédit (KNN)")
         plt.tight_layout()
-        plt.savefig("data/validation_accuracy_groupe.png", dpi=150)
+        plt.savefig(os.path.join(self.data_path, "validation_accuracy_groupe.png"), dpi=150)
         plt.close()
         print(f"📈 Figure : data/validation_accuracy_groupe.png")
 
@@ -278,7 +315,7 @@ class ROMEAIEngine:
             ax.text(i - width/2, a + 0.02, f'{a:.0%}', ha='center', fontsize=9)
             ax.text(i + width/2, b + 0.02, f'{b:.0%}', ha='center', fontsize=9)
         plt.tight_layout()
-        plt.savefig("data/ablation_offres.png", dpi=150)
+        plt.savefig(os.path.join(self.data_path, "ablation_offres.png"), dpi=150)
         plt.close()
         print(f"📈 Figure : data/ablation_offres.png")
 
@@ -334,9 +371,10 @@ class ROMEAIEngine:
                 "n_codes_uniques": len(c),
             })
 
-        df_detail = pd.DataFrame(detail).sort_values("stabilite", ascending=False)
-        df_detail.to_csv("data/non_determinism_detail.csv", index=False)
-
+       # Convertir la liste en DataFrame Pandas avant l'export
+        df_export = pd.DataFrame(detail)
+        df_export.to_csv(os.path.join(self.data_path, "non_determinism_detail.csv"), index=False)
+        
         stab_moy = float(np.mean(list(stabilite_par_cv.values())))
         stab_med = float(np.median(list(stabilite_par_cv.values())))
         n_unstable = sum(1 for s in stabilite_par_cv.values() if s < 0.7)
@@ -360,7 +398,7 @@ class ROMEAIEngine:
         plt.title(f"Non-déterminisme du modèle KNN ({n_runs} runs avec resampling)")
         plt.legend()
         plt.tight_layout()
-        plt.savefig("data/validation_non_determinisme.png", dpi=150)
+        plt.savefig(os.path.join(self.data_path, "validation_non_determinisme.png"), dpi=150)
         plt.close()
         print(f"📈 Figure : data/validation_non_determinisme.png")
 
@@ -439,17 +477,46 @@ def execute(n, text, pdf, c1):
             source = " ".join([p.extract_text() for p in reader.pages])
         except Exception:
             return dbc.Alert("Erreur PDF", color="danger"), ""
-
-    recs = get_engine().predict(source)
+        
+    # Appel de la prédiction avec notre sécurité
+    recs = get_engine().predict(source, threshold_score=10.0)
+    
     if recs == "SIGNAL_INSUFFISANT":
         return dbc.Alert("Texte trop court pour l'IA", color="warning"), ""
 
+    if recs == "HORS_PERIMETRE":
+        return html.Div([
+            dbc.Alert(
+                [
+                    html.H5("🚫 Profil hors périmètre", className="alert-heading fw-bold"),
+                    html.P(
+                        "Les compétences détectées ne correspondent pas aux métiers de l'Informatique et du Numérique (Famille ROME M18). "
+                        "Le modèle a refusé la classification pour éviter un faux résultat."
+                    )
+                ], 
+                color="white", 
+                className="mt-4 glass-card"
+            )
+        ]), source
+
     return html.Div([
         html.H4("Métiers Recommandés :", className="text-white mt-4"),
-        html.Div([html.Div([
-            html.Span(r['metier'], className="result-highlight"),
-            html.Small(f" Match : {r['score']}%")
-        ], className="glass-card p-3 mb-2") for r in recs])
+        html.Div([
+            html.Div([
+                html.Div([
+                    html.Span(r['metier'], className="result-highlight"),
+                    html.Small(f" Match : {r['score']}%", className="text-white fw-bold", style={"fontSize": "1.1em"})
+                ], className="d-flex justify-content-between align-items-center mb-1"),
+                
+                # Barre de progression personnalisée
+                dbc.Progress(
+                    value=r['score'], 
+                    color="success" if r['score'] >= 20.0 else "warning",
+                    className="mb-2",
+                    style={"height": "12px"}
+                )
+            ], className="glass-card p-3 mb-2") for r in recs
+        ])
     ]), source
 
 # ==========================================================

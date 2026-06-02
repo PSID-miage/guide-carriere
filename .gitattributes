@@ -1,0 +1,2 @@
+data/cache_camembert/*.npy filter=lfs diff=lfs merge=lfs -text
+data/cache_camembert/*.json filter=lfs diff=lfs merge=lfs -text

@@ -7,8 +7,6 @@ matplotlib
 seaborn
 PyPDF2
 sentence-transformers
-torch
-transformers
 huggingface-hub
 gunicorn
 python-dotenv

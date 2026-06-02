@@ -1,4 +1,4 @@
-
+import os
 import dash
 import dash_bootstrap_components as dbc
 from dash import html, dcc
@@ -27,4 +27,11 @@ app.layout = html.Div(
 server = app.server
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 8050))
+
+    app.run(
+        debug=False,
+        use_reloader=False,
+        dev_tools_hot_reload=False,
+        port=port,
+    )

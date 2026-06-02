@@ -404,19 +404,27 @@ class ROMEAIEngine:
         distances, indices = self.knn_model.kneighbors(user_vec, n_neighbors=top_n)
 
         results = []
+        
+        seen_rome_codes = set() # Pour éviter les doublons dans les 3 résultats
 
         for i, idx in enumerate(indices[0]):
             row = self.df_trained.iloc[int(idx)]
             score = round((1 - distances[0][i]) * 100, 1)
 
-            if score >= threshold_score:
-                results.append({
-                    "doc_id": int(idx),
-                    "metier": row["libelle_rome"],
-                    "code": row["code_rome"],
-                    "source": row["source"],
-                    "score": score
-                })
+            # On récupère le code ROME (qu'il vienne d'une offre ou d'un métier)
+            rome_code = row['code_rome']
+            
+            if rome_code not in seen_rome_codes and score >= (threshold_score or self.default_tfidf_threshold):
+                # On va chercher la fiche ROME officielle
+                fiche_rome = self.get_rome_reference_by_code(rome_code)
+                if fiche_rome is not None:
+                    results.append({
+                        "doc_id": int(fiche_rome.name), # ID de la fiche ROME
+                        "metier": fiche_rome["libelle_rome"],
+                        "code": rome_code,
+                        "score": score
+                    })
+                    seen_rome_codes.add(rome_code)
 
         if not results:
             return "HORS_PERIMETRE"
@@ -728,6 +736,14 @@ class ROMEAIEngine:
         print(f"📈 Figure : {os.path.join(self.output_dir, 'validation_non_determinisme.png')}")
 
         return stability_metrics
+    
+    def get_offres_by_rome(self, code_rome, limit=3):
+        # Filtre sur la base de données entière pour trouver les offres liées
+        offres = self.df_trained[
+            (self.df_trained['code_rome'] == code_rome) & 
+            (self.df_trained['source'] == 'offre')
+        ]
+        return offres.head(limit).to_dict('records')
 
 
 _engine_singleton = None
@@ -816,188 +832,82 @@ def get_ml_main_layout():
         html.Div(id="analysis-preview", className="mt-5")
     ])
 
+def construire_url_ft(rome_code):
+    return f"https://candidat.francetravail.fr/offres/recherche?rome={rome_code}"
 
-def get_detail_layout(doc_id):
-    row = get_engine().get_document_detail(doc_id)
+def get_detail_layout(code_rome):
+    # 1. Récupération des données ROME
+    df = get_engine().df_trained
+    rome_data = df[(df['code_rome'] == code_rome) & (df['source'] == 'rome')]
 
-    text_style = {
-        "color": "#EAF2FF",
-        "fontSize": "16px",
-        "lineHeight": "1.8",
-        "whiteSpace": "pre-line"
-    }
-
-    soft_text_style = {
-        "color": "#BFD0E8",
-        "fontSize": "15px",
-        "lineHeight": "1.7"
-    }
-
-    title_style = {
-        "color": "#FFFFFF",
-        "fontWeight": "700"
-    }
-
-    card_style = {
-        "background": "rgba(20, 34, 58, 0.92)",
-        "border": "1px solid rgba(255, 255, 255, 0.12)",
-        "borderRadius": "22px",
-        "boxShadow": "0 18px 45px rgba(0, 0, 0, 0.25)"
-    }
-
-    badge_style = {
-        "background": "linear-gradient(90deg, #27D3FF, #7C5CFF)",
-        "color": "#FFFFFF",
-        "padding": "8px 14px",
-        "borderRadius": "999px",
-        "fontWeight": "700",
-        "display": "inline-block",
-        "marginBottom": "16px"
-    }
-
-    if row is None:
+    if rome_data.empty:
         return html.Div([
-            dcc.Link(
-                "← Retour à l'analyse",
-                href="/ml",
-                className="back-link mb-4",
-                style={"color": "#8FE7FF", "fontWeight": "600", "textDecoration": "none"}
-            ),
-            dbc.Alert("Document introuvable.", color="warning")
+            dcc.Link("← Retour à l'analyse", href="/ml", className="back-link mb-4"),
+            dbc.Alert("Fiche métier ROME introuvable.", color="warning")
         ], className="landing-container")
 
-    source = _clean_display(row.get("source", ""))
-    title = _clean_display(row.get("libelle_rome", "Document sans titre")) or "Document sans titre"
-    code = _clean_display(row.get("code_rome", "N/A")) or "N/A"
-    description = _clean_display(row.get("description", ""))
-    competences = _clean_display(row.get("competences", ""))
-    offre_url = _clean_display(row.get("offre_url", ""))
+    row = rome_data.iloc[0]
+    offres = get_engine().get_offres_by_rome(code_rome)
 
-    if source == "offre":
-        offre_competences = _as_list(competences, limit=12)
-        rome_reference = get_engine().get_rome_reference_by_code(code)
+    # Styles
+    text_style = {"color": "#EAF2FF", "fontSize": "16px", "lineHeight": "1.8", "whiteSpace": "pre-line"}
+    soft_text_style = {"color": "#BFD0E8", "fontSize": "15px", "lineHeight": "1.7"}
+    title_style = {"color": "#FFFFFF", "fontWeight": "700"}
+    card_style = {"background": "rgba(20, 34, 58, 0.92)", "border": "1px solid rgba(255, 255, 255, 0.12)", "borderRadius": "22px", "boxShadow": "0 18px 45px rgba(0, 0, 0, 0.25)"}
+    badge_style = {"background": "linear-gradient(90deg, #27D3FF, #7C5CFF)", "color": "#FFFFFF", "padding": "8px 14px", "borderRadius": "999px", "fontWeight": "700", "display": "inline-block", "marginBottom": "16px"}
 
-        rome_competences = []
-        if rome_reference is not None:
-            rome_competences = _as_list(rome_reference.get("libelle_competence", []), limit=12)
-            if not rome_competences:
-                rome_competences = _as_list(rome_reference.get("competences", ""), limit=12)
-
-        competences_affichees = offre_competences if offre_competences else rome_competences
-
-        if offre_competences:
-            competence_source = "Compétences issues de l'offre France Travail."
-        elif rome_competences:
-            competence_source = "Compétences récupérées depuis la fiche métier ROME associée."
-        else:
-            competence_source = "Non disponible"
-
-        return html.Div([
-            dcc.Link(
-                "← Retour à l'analyse",
-                href="/ml",
-                className="back-link mb-4",
-                style={"color": "#8FE7FF", "fontWeight": "600", "textDecoration": "none"}
-            ),
-
-            html.Div([
-                html.Div([
-                    html.Span("Offre France Travail", style=badge_style),
-                    html.H1(title, className="gradient-text mb-3"),
-                    html.P(f"Code ROME : {code}", style=soft_text_style),
-                    html.P(
-                        "Cette page affiche le détail de l'offre utilisée par le modèle comme voisin le plus proche.",
-                        style=soft_text_style
-                    )
-                ], className="glass-card p-4 mb-4", style=card_style),
-
-                dbc.Row([
-                    dbc.Col([
-                        html.Div([
-                            html.H4("Description de l'offre", className="mb-3", style=title_style),
-                            html.P(
-                                description if description else "Description non disponible.",
-                                style=text_style
-                            )
-                        ], className="glass-card p-4 h-100", style=card_style)
-                    ], lg=7, className="mb-4"),
-
-                    dbc.Col([
-                        html.Div([
-                            html.H4("Compétences", className="mb-2", style=title_style),
-                            html.P(competence_source, style=soft_text_style),
-
-                            html.Ul([
-                                html.Li(c, style={**text_style, "marginBottom": "10px"})
-                                for c in competences_affichees
-                            ], style={"paddingLeft": "22px"}) if competences_affichees else html.P(
-                                "Non disponible",
-                                style=text_style
-                            ),
-
-                            html.Hr(style={"borderColor": "rgba(255, 255, 255, 0.18)", "margin": "26px 0"}),
-
-                            html.H5("Lien de l'offre", className="mt-3", style=title_style),
-
-                            html.A(
-                                "Ouvrir l'offre",
-                                href=offre_url,
-                                target="_blank",
-                                className="hero-primary-btn d-inline-block mt-2",
-                                style={"textDecoration": "none", "color": "#FFFFFF", "fontWeight": "700"}
-                            ) if offre_url else html.P(
-                                "Non disponible",
-                                style=text_style
-                            )
-                        ], className="glass-card p-4 h-100", style=card_style)
-                    ], lg=5, className="mb-4")
-                ])
-            ])
-        ], className="landing-container")
-
+    # Extraction des données
+    title = row.get("libelle_rome", "Métier inconnu")
     skills = _as_list(row.get("libelle_competence", []), limit=12)
     savoirs = _as_list(row.get("libelle_savoir", []), limit=12)
 
     return html.Div([
-        dcc.Link(
-            "← Retour à l'analyse",
-            href="/ml",
-            className="back-link mb-4",
-            style={"color": "#8FE7FF", "fontWeight": "600", "textDecoration": "none"}
-        ),
+        dcc.Link("← Retour à l'analyse", href="/ml", className="back-link mb-4", style={"color": "#8FE7FF", "fontWeight": "600", "textDecoration": "none"}),
 
+        # Header
         html.Div([
-            html.Span("Fiche métier ROME", style=badge_style),
+            html.Span("Fiche Métier ROME", style=badge_style),
             html.H1(title, className="gradient-text mb-3"),
-            html.P(f"Code ROME : {code}", style=soft_text_style)
+            html.P(f"Code ROME : {code_rome}", style=soft_text_style),
         ], className="glass-card p-4 mb-4", style=card_style),
 
+        # Grille principale
         dbc.Row([
+            # Colonne 1 : Compétences & Savoirs
             dbc.Col([
                 html.Div([
                     html.H4("Compétences clés", className="mb-3", style=title_style),
-                    html.Ul([
-                        html.Li(c, style={**text_style, "marginBottom": "10px"})
-                        for c in skills
-                    ], style={"paddingLeft": "22px"}) if skills else html.P(
-                        "Non disponible",
-                        style=text_style
-                    )
+                    html.Ul([html.Li(c, style={**text_style, "marginBottom": "10px"}) for c in skills], style={"paddingLeft": "22px"}),
+                    
+                    html.H4("Savoirs associés", className="mt-4 mb-3", style=title_style),
+                    html.Ul([html.Li(s, style={**text_style, "marginBottom": "10px"}) for s in savoirs], style={"paddingLeft": "22px"}),
                 ], className="glass-card p-4 h-100", style=card_style)
-            ], lg=6, className="mb-4"),
+            ], lg=7, className="mb-4"),
 
+           # Colonne 2 : Offres France Travail
             dbc.Col([
                 html.Div([
-                    html.H4("Savoirs associés", className="mb-3", style=title_style),
-                    html.Ul([
-                        html.Li(s, style={**text_style, "marginBottom": "10px"})
-                        for s in savoirs
-                    ], style={"paddingLeft": "22px"}) if savoirs else html.P(
-                        "Non disponible",
-                        style=text_style
-                    )
+                    html.H4(f"Offres France Travail ({len(offres)})", className="mb-3", style=title_style),
+                    
+                    # 1. Liste des titres des offres (juste visuel)
+                    html.Div([
+                        html.Div([
+                            html.P(o.get('libelle_rome', 'Offre'), className="fw-bold text-white mb-0"),
+                        ], className="glass-card p-3 mb-2", style={"background": "rgba(255,255,255,0.05)"})
+                        for o in offres[:5]
+                    ]) if offres else html.P("Aucune offre disponible.", style=text_style),
+                    
+                    # 2. Bouton unique de redirection générale
+                    html.A(
+                        "Voir toutes les offres sur France Travail",
+                        href=construire_url_ft(code_rome),
+                        target="_blank",
+                        className="btn btn-primary mt-3 w-100",
+                        style={"background": "linear-gradient(90deg, #27D3FF, #7C5CFF)", "border": "none", "fontWeight": "600"}
+                    ) if offres else None
+                    
                 ], className="glass-card p-4 h-100", style=card_style)
-            ], lg=6, className="mb-4")
+            ], lg=5, className="mb-4")
         ])
     ], className="landing-container")
 
@@ -1110,13 +1020,14 @@ def execute(n, text, pdf, c1):
 
                     html.Div([
                         html.Small(
-                            f"Code ROME : {r['code']} | Source : {'Offre France Travail' if r['source'] == 'offre' else 'Fiche ROME'}",
+                            # Remplace la ligne problématique par celle-ci :
+                            f"Code ROME : {r.get('code', 'N/A')} | Source : {r.get('source', 'Fiche ROME')}",
                             className="text-muted"
                         ),
 
                         dcc.Link(
                             "Voir détail",
-                            href=f"/ml?doc_id={r['doc_id']}",
+                            href=f"/ml?doc_id={r['code']}", # On envoie le code ROME ici
                             className="btn btn-sm btn-outline-info ms-3"
                         )
                     ], className="d-flex justify-content-between align-items-center")

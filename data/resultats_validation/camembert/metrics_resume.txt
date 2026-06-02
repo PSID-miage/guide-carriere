@@ -1,0 +1,29 @@
+Résultats CamemBERT + KNN
+
+Base utilisée :
+- 94 fiches ROME M18
+- 6379 offres France Travail
+- Total : 6473 documents
+
+Modèle utilisé :
+- Vectorisation sémantique avec CamemBERT
+- Recherche des plus proches voisins avec KNN
+- Distance cosine pour mesurer la similarité
+- Top3 recommandations métiers les plus proches
+
+Validation 1 Accuracy sur 31 CV annotés :
+- Accuracy top1 ROME exact : 12,90 %
+- Accuracy top3 ROME exact : 32,26 %
+- Accuracy groupe thématique : 41,94 %
+
+Étude d’ablation :
+- ROME seul : Top1 = 3,23 %, Accuracy groupe = 45,16 %
+- ROME + offres France Travail : Top1 = 12,90 %, Accuracy groupe = 41,94 %
+- Gain Top1 : +9,7 points
+- Gain Accuracy groupe : -3,2 points
+
+Validation 2 Non déterminisme :
+- Stabilité moyenne : 89,35 %
+- Stabilité médiane : 90,00 %
+- CV instables (< 70 %) : 1/31
+

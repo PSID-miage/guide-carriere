@@ -1,0 +1,16 @@
+{
+  "model_type": "tfidf",
+  "n_cv": 31,
+  "top1_fine": 0.22580645161290322,
+  "top3_fine": 0.41935483870967744,
+  "accuracy_groupe": 0.3870967741935484,
+  "rome_only_top1": 0.0967741935483871,
+  "rome_only_groupe": 0.3548387096774194,
+  "rome_plus_offres_top1": 0.22580645161290322,
+  "rome_plus_offres_groupe": 0.3870967741935484,
+  "gain_top1": 0.12903225806451613,
+  "gain_groupe": 0.032258064516129004,
+  "stabilite_moyenne": 0.9016129032258065,
+  "stabilite_mediane": 0.9,
+  "n_cv_instables": 2
+}

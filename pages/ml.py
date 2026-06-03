@@ -184,12 +184,12 @@ class ROMEAIEngine:
         print("✅ CamemBERT + KNN initialisé")
 
     def _load_embedder(self):
-        from sentence_transformers import SentenceTransformer
-        try:
-            return SentenceTransformer(self.model_name, local_files_only=True)
-        except Exception:
-            return SentenceTransformer(self.model_name)
-
+        #from sentence_transformers import SentenceTransformer
+        #try:
+            #return SentenceTransformer(self.model_name, local_files_only=True)
+        #except Exception:
+            #return SentenceTransformer(self.model_name)
+        raise RuntimeError("CamemBERT est désactivé sur Render.")
     def _prepare_texts(self, texts):
         prepared = [str(t).lower().strip() for t in texts]
 
@@ -1213,7 +1213,7 @@ def run_both_validations():
     results = []
 
     results.append(run_validations("tfidf"))
-    results.append(run_validations("camembert"))
+    #results.append(run_validations("camembert"))
 
     comparison_path = os.path.join(_ROOT, "data", "resultats_validation", "comparaison_tfidf_camembert.csv")
     pd.DataFrame(results).to_csv(comparison_path, index=False)

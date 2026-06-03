@@ -6,8 +6,6 @@ scikit-learn
 matplotlib
 seaborn
 PyPDF2
-sentence-transformers
-huggingface-hub
 gunicorn
 python-dotenv
 requests

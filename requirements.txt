@@ -9,3 +9,4 @@ PyPDF2
 gunicorn
 python-dotenv
 requests
+networkx

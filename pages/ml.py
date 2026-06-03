@@ -38,7 +38,7 @@ from dash import html, dcc, Input, Output, State, callback, ctx
 from urllib.parse import parse_qs, unquote
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.neighbors import KNeighborsClassifier
-from sentence_transformers import SentenceTransformer
+#from sentence_transformers import SentenceTransformer
 
 try:
     import PyPDF2
@@ -130,6 +130,7 @@ class ROMEAIEngine:
         print("✅ CamemBERT + KNN initialisé")
 
     def _load_embedder(self):
+        from sentence_transformers import SentenceTransformer
         try:
             return SentenceTransformer(self.model_name, local_files_only=True)
         except Exception:

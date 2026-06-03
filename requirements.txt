@@ -10,7 +10,3 @@ gunicorn
 python-dotenv
 requests
 networkx
-data/cache_camembert/
-.DS_Store
-__pycache__/
-*.pyc

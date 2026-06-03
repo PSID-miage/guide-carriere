@@ -100,6 +100,60 @@ class ROMEAIEngine:
         else:
             self._fit_camembert()
 
+    def get_ia_impact(self, row):
+        text = str(row.get("all_text_knowledge", "")).lower()
+
+        critere_info = ["analyse", "données", "statistique", "reporting", "calcul"]
+        critere_auto = ["automatisation", "contrôle", "traitement", "procédure"]
+        critere_num = ["logiciel", "numérique", "informatique", "algorithme"]
+        critere_humain = ["relation", "écoute", "soin", "accompagnement"]
+
+        info_matches = [kw for kw in critere_info if kw in text]
+        auto_matches = [kw for kw in critere_auto if kw in text]
+        num_matches = [kw for kw in critere_num if kw in text]
+        humain_matches = [kw for kw in critere_humain if kw in text]
+
+        score_info = len(info_matches)
+        score_auto = len(auto_matches)
+        score_num = len(num_matches)
+        score_humain = len(humain_matches)
+
+        try:
+            raw_val = str(row.get("transition_num", 0)).replace("O", "0").strip()
+            score_transition = float(raw_val)
+        except Exception:
+            score_transition = 0
+
+        final_score = score_info + score_auto + score_num + score_transition - score_humain
+        final_score = max(0, min(final_score, 10))
+
+        if final_score >= 7:
+            niveau = "Élevé"
+        elif final_score >= 4:
+            niveau = "Modéré"
+        else:
+            niveau = "Faible"
+
+        explication = (
+            f"Le score est basé sur : {score_info} indicateurs analytiques, "
+            f"{score_auto} indicateurs d'automatisation, "
+            f"{score_num} indicateurs numériques, "
+            f"et {score_humain} indicateurs humains."
+        )
+
+        return {
+            "score": final_score,
+            "niveau": niveau,
+            "explication": explication,
+            "details": {
+                "analyse": info_matches,
+                "automatisation": auto_matches,
+                "numerique": num_matches,
+                "humain": humain_matches,
+                "transition": score_transition
+            }
+        }
+    
     def _fit_tfidf(self):
         self.vectorizer = TfidfVectorizer(
             ngram_range=(1, 3),
@@ -386,6 +440,7 @@ class ROMEAIEngine:
         except Exception as e:
             print(f"❌ Erreur build_knowledge_base : {e}")
             return pd.DataFrame()
+
 
     def predict(self, user_input, top_n=3, threshold_score=None):
         if not user_input or len(str(user_input).strip()) < 30:
@@ -785,7 +840,66 @@ def _as_list(value, limit=10):
         return parts[:limit]
 
     return []
+    
+def build_ia_impact_display(ia_data, title_style, soft_text_style):
+    if not ia_data:
+        return html.Div()
 
+    score = ia_data.get("score", 0)
+    niveau = ia_data.get("niveau", "Non évalué")
+    explication = ia_data.get("explication", "")
+
+    try:
+        score_float = float(score)
+    except Exception:
+        score_float = 0
+
+    if niveau == "Élevé":
+        color = "danger"
+    elif niveau == "Modéré":
+        color = "warning"
+    else:
+        color = "success"
+
+    return html.Div([
+        html.Hr(style={
+            "borderColor": "rgba(255, 255, 255, 0.18)",
+            "margin": "26px 0"
+        }),
+
+        html.H5("Impact potentiel de l'IA", className="mt-3 mb-3", style=title_style),
+
+        html.Div([
+            html.Span(
+                f"Score : {score_float:g}/10",
+                style={
+                    "color": "#FFFFFF",
+                    "fontWeight": "700",
+                    "fontSize": "18px"
+                }
+            ),
+
+            dbc.Badge(
+                niveau,
+                color=color,
+                className="ms-2",
+                style={
+                    "fontSize": "0.85rem",
+                    "padding": "7px 10px"
+                }
+            )
+        ], className="d-flex align-items-center mb-3"),
+
+        dbc.Progress(
+            value=score_float * 10,
+            color=color,
+            className="mb-3",
+            style={"height": "12px"}
+        ),
+
+        html.P(explication, style=soft_text_style)
+    ])
+    
 
 def get_ml_main_layout():
     return html.Div([
@@ -838,7 +952,8 @@ def construire_url_ft(rome_code):
 
 def get_detail_layout(code_rome):
     # 1. Récupération des données ROME
-    df = get_engine().df_trained
+    engine = get_engine()
+    df = engine.df_trained
     rome_data = df[(df['code_rome'] == code_rome) & (df['source'] == 'rome')]
 
     if rome_data.empty:
@@ -848,7 +963,7 @@ def get_detail_layout(code_rome):
         ], className="landing-container")
 
     row = rome_data.iloc[0]
-    offres = get_engine().get_offres_by_rome(code_rome)
+    offres = engine.get_offres_by_rome(code_rome)
 
     # Styles
     text_style = {"color": "#EAF2FF", "fontSize": "16px", "lineHeight": "1.8", "whiteSpace": "pre-line"}
@@ -856,6 +971,8 @@ def get_detail_layout(code_rome):
     title_style = {"color": "#FFFFFF", "fontWeight": "700"}
     card_style = {"background": "rgba(20, 34, 58, 0.92)", "border": "1px solid rgba(255, 255, 255, 0.12)", "borderRadius": "22px", "boxShadow": "0 18px 45px rgba(0, 0, 0, 0.25)"}
     badge_style = {"background": "linear-gradient(90deg, #27D3FF, #7C5CFF)", "color": "#FFFFFF", "padding": "8px 14px", "borderRadius": "999px", "fontWeight": "700", "display": "inline-block", "marginBottom": "16px"}
+    ia_data = engine.get_ia_impact(row)
+    ia_impact_display = build_ia_impact_display(ia_data, title_style, soft_text_style)
 
     # Extraction des données
     title = row.get("libelle_rome", "Métier inconnu")
@@ -904,8 +1021,14 @@ def get_detail_layout(code_rome):
                         href=construire_url_ft(code_rome),
                         target="_blank",
                         className="btn btn-primary mt-3 w-100",
-                        style={"background": "linear-gradient(90deg, #27D3FF, #7C5CFF)", "border": "none", "fontWeight": "600"}
-                    ) if offres else None
+                        style={
+                            "background": "linear-gradient(90deg, #27D3FF, #7C5CFF)",
+                            "border": "none",
+                            "fontWeight": "600"
+                        }
+                    ) if offres else None,
+
+                    ia_impact_display
                     
                 ], className="glass-card p-4 h-100", style=card_style)
             ], lg=5, className="mb-4")
